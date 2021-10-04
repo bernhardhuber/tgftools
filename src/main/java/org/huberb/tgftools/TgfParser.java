@@ -147,7 +147,9 @@ public class TgfParser {
         TgfEdge tgfEdge = null;
         TgfNode tgfNode = null;
         String trimmedLine = line.trim();
-        if (trimmedLine.isEmpty()) {
+        if (trimmedLine.isEmpty()
+                || trimmedLine.startsWith("--")
+                || trimmedLine.startsWith("'")) {
             token = TgfToken.empty;
         } else if (trimmedLine.startsWith("#")) {
             token = TgfToken.hashMark;

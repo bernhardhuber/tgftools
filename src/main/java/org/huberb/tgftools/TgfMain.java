@@ -105,7 +105,7 @@ public class TgfMain implements Callable<Integer> {
     }
 
     /**
-     * Define supported conversion formats.
+     * Define supported conversion formats, and its extensions.
      */
     enum ConvertToFormat {
         noformat {
@@ -143,8 +143,8 @@ public class TgfMain implements Callable<Integer> {
     }
 
     /**
-     * Create a map, mapping {@link ConvertToFormat} to value of convert
-     * commandline option.
+     * Create a map, mapping {@link ConvertToFormat} to value of convert-to
+     * option.
      *
      * @return
      */
@@ -183,7 +183,7 @@ public class TgfMain implements Callable<Integer> {
             return;
         }
         //---
-        Map<ConvertToFormat, Optional<File>> outputFileList = xxx(convertToFormatList);
+        final Map<ConvertToFormat, Optional<File>> outputFileList = createMappingConvertToFormatToOutputFile(convertToFormatList);
 
         //---
         for (ConvertToFormat convertToFormat : convertToFormatList) {
@@ -227,7 +227,13 @@ public class TgfMain implements Callable<Integer> {
         }
     }
 
-    Map<ConvertToFormat, Optional<File>> xxx(List<ConvertToFormat> convertToFormatList) {
+    /**
+     * Map {@link ConvertToFormat} to a conversion output file.
+     *
+     * @param convertToFormatList
+     * @return
+     */
+    Map<ConvertToFormat, Optional<File>> createMappingConvertToFormatToOutputFile(List<ConvertToFormat> convertToFormatList) {
         int numberOfConversion = convertToFormatList.size();
         // define outputFile(s)
         final Map<ConvertToFormat, Optional<File>> convertToOutputFiles = new HashMap<>();
@@ -249,6 +255,9 @@ public class TgfMain implements Callable<Integer> {
 
     /**
      * Factory for creating a {@link Reader}.
+     *
+     * <p>
+     * Use this reader for reading TGF data.
      */
     static class ReaderFactory {
 
