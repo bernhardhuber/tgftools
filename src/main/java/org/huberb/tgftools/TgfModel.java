@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Encapsulate tgf.
+ * Encapsulate a model of TGF.
  *
  * <p>
  * A {@link TgfModel} consists of nodes {@link TgfNode}, and edges
@@ -82,7 +82,7 @@ public class TgfModel implements Serializable {
     }
 
     /**
-     * Encapsulate a tgf node.
+     * Encapsulate a TGF node.
      */
     public static class TgfNode implements Serializable {
 
@@ -140,7 +140,7 @@ public class TgfModel implements Serializable {
     }
 
     /*
-     * Encapsulate a tgf edge.
+     * Encapsulate a TGF edge.
      */
     public static class TgfEdge implements Serializable {
 

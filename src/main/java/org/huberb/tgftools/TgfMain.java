@@ -26,20 +26,19 @@ import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.Callable;
-import java.util.stream.Collectors;
+import org.huberb.tgftools.TgfConvertToOptions.ConvertToFormat;
 import org.huberb.tgftools.TgfConverters.CsvConverter;
 import org.huberb.tgftools.TgfConverters.JsonConverter;
 import org.huberb.tgftools.TgfConverters.PumlConverter;
 import org.huberb.tgftools.TgfConverters.YamlConverter;
-import org.huberb.tgftools.TgfMain.ConvertToFormat;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Help.Ansi;
+import picocli.CommandLine.Mixin;
 import picocli.CommandLine.Option;
 
 /**
@@ -60,23 +59,12 @@ public class TgfMain implements Callable<Integer> {
     @Option(names = {"-o", "--output"},
             description = "write to file, if not specified write to stdout")
     private File outputFile;
-    @Option(names = {"--overwrite-outpufile"},
+    @Option(names = {"--overwrite-outputfile"},
             description = "overwrite existing output file")
     private boolean overwriteOutputfile;
 
-    //---
-    @Option(names = {"--convert-puml"},
-            description = "convert TGF to puml")
-    private boolean convertToPuml;
-    @Option(names = {"--convert-csv"},
-            description = "convert TGF to csv")
-    private boolean convertToCsv;
-    @Option(names = {"--convert-json"},
-            description = "convert TGF to json")
-    private boolean convertToJson;
-    @Option(names = {"--convert-yaml"},
-            description = "convert TGF to yaml")
-    private boolean convertToYaml;
+    @Mixin
+    private TgfConvertToOptions tgfConvertToOptions;
 
     /**
      * Commandline entry point.
@@ -104,59 +92,6 @@ public class TgfMain implements Callable<Integer> {
         return 0;
     }
 
-    /**
-     * Define supported conversion formats, and its extensions.
-     */
-    enum ConvertToFormat {
-        noformat {
-            @Override
-            String getExtension() {
-                return "";
-            }
-        },
-        puml {
-            @Override
-            String getExtension() {
-                return ".puml";
-            }
-        },
-        csv {
-            @Override
-            String getExtension() {
-                return ".csv";
-            }
-        },
-        json {
-            @Override
-            String getExtension() {
-                return ".json";
-            }
-        },
-        yaml {
-            @Override
-            String getExtension() {
-                return ".yaml";
-            }
-        };
-
-        abstract String getExtension();
-    }
-
-    /**
-     * Create a map, mapping {@link ConvertToFormat} to value of convert-to
-     * option.
-     *
-     * @return
-     */
-    Map<ConvertToFormat, Boolean> createConvertToFormatMap() {
-        final Map<ConvertToFormat, Boolean> result = new LinkedHashMap<>();
-        result.put(ConvertToFormat.puml, this.convertToPuml);
-        result.put(ConvertToFormat.csv, this.convertToCsv);
-        result.put(ConvertToFormat.json, this.convertToJson);
-        result.put(ConvertToFormat.yaml, this.convertToYaml);
-        return result;
-    }
-
     String evaluteWriteToFilenameOrStdin() {
         final String result = Optional.ofNullable(this.tgfFile)
                 .map((f) -> f.toString())
@@ -170,13 +105,7 @@ public class TgfMain implements Callable<Integer> {
      * @param tgfModel
      */
     void convertTgfModel(TgfModel tgfModel) {
-
-        final Map<ConvertToFormat, Boolean> convertToFormatBooleanMap = createConvertToFormatMap();
-        // filter where map.entry is true
-        final List<ConvertToFormat> convertToFormatList = convertToFormatBooleanMap.entrySet().stream()
-                .filter((e) -> e.getValue())
-                .map((e) -> e.getKey())
-                .collect(Collectors.toList());
+        final List<ConvertToFormat> convertToFormatList = tgfConvertToOptions.createConvertToFormatList();
         if (convertToFormatList.isEmpty()) {
             String str = Ansi.AUTO.string("@|bold No|@ conversion option specified.");
             System.err.println(str);

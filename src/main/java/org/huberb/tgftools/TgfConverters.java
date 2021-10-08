@@ -19,6 +19,7 @@ import org.huberb.tgftools.TgfModel.TgfEdge;
 import org.huberb.tgftools.TgfModel.TgfNode;
 
 /**
+ * Conversion of {@link TgfModel}to various output formats.
  *
  * @author berni3
  */
