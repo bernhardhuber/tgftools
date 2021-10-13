@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.huberb.tgftools;
+package org.huberb.tgftools.main;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -30,11 +30,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.Callable;
-import org.huberb.tgftools.TgfConvertToOptions.ConvertToFormat;
 import org.huberb.tgftools.TgfConverters.CsvConverter;
 import org.huberb.tgftools.TgfConverters.JsonConverter;
 import org.huberb.tgftools.TgfConverters.PumlConverter;
 import org.huberb.tgftools.TgfConverters.YamlConverter;
+import org.huberb.tgftools.TgfModel;
+import org.huberb.tgftools.TgfParser;
+import org.huberb.tgftools.main.TgfConvertToOptions.ConvertToFormat;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Help.Ansi;

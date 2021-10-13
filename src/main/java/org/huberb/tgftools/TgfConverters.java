@@ -30,7 +30,7 @@ public class TgfConverters {
         String convert(TgfModel tgfModel);
     }
 
-    static class PumlConverter implements ITgfConverterToString {
+    public static class PumlConverter implements ITgfConverterToString {
 
         /**
          * Convert {@link TgfModel} to plant uml.
@@ -54,7 +54,7 @@ public class TgfConverters {
         }
     }
 
-    static class CsvConverter implements ITgfConverterToString {
+    public static class CsvConverter implements ITgfConverterToString {
 
         /**
          * Convert {@link TgfModel} to csv.
@@ -66,16 +66,22 @@ public class TgfConverters {
             final StringBuilder sb = new StringBuilder();
             sb.append(String.format("\"type\",\"id_from\",\"name_to\",\"label\"%n"));
             tgfModel.tgfNodeList.values().forEach(tgfNode -> {
-                sb.append(String.format("\"node\"," + "\"%s\"," + "\"%s\"," + "\"\"%n", tgfNode.id, tgfNode.name));
+                sb.append(String.format("\"node\","
+                        + "\"%s\","
+                        + "\"%s\","
+                        + "\"\"%n", tgfNode.id, tgfNode.name));
             });
             tgfModel.tgfEdgList.forEach(tgfEdge -> {
-                sb.append(String.format("\"edge\"," + "\"%s\"," + "\"%s\"," + "\"%s\"%n", tgfEdge.from, tgfEdge.to, tgfEdge.label));
+                sb.append(String.format("\"edge\","
+                        + "\"%s\","
+                        + "\"%s\","
+                        + "\"%s\"%n", tgfEdge.from, tgfEdge.to, tgfEdge.label));
             });
             return sb.toString();
         }
     }
 
-    static class JsonConverter implements ITgfConverterToString {
+    public static class JsonConverter implements ITgfConverterToString {
 
         /**
          * Convert {@link TgfModel} to json.
@@ -93,7 +99,10 @@ public class TgfConverters {
                     if (i > 0) {
                         sb.append(String.format(",%n"));
                     }
-                    sb.append(String.format("{" + "\"id\":\"%s\"," + "\"name\":\"%s\"" + "}", tgfNode.id, tgfNode.name));
+                    sb.append(String.format("{"
+                            + "\"id\":\"%s\","
+                            + "\"name\":\"%s\""
+                            + "}", tgfNode.id, tgfNode.name));
                     i += 1;
                 }
             }
@@ -105,7 +114,11 @@ public class TgfConverters {
                     if (i > 0) {
                         sb.append(String.format(",%n"));
                     }
-                    sb.append(String.format("{" + "\"from\":\"%s\"," + "\"to\":\"%s\"," + "\"label\":\"%s\"" + "}", tgfEdge.from, tgfEdge.to, tgfEdge.label));
+                    sb.append(String.format("{"
+                            + "\"from\":\"%s\","
+                            + "\"to\":\"%s\","
+                            + "\"label\":\"%s\""
+                            + "}", tgfEdge.from, tgfEdge.to, tgfEdge.label));
                     i += 1;
                 }
             }
@@ -115,7 +128,7 @@ public class TgfConverters {
         }
     }
 
-    static class YamlConverter implements ITgfConverterToString {
+    public static class YamlConverter implements ITgfConverterToString {
 
         /**
          * Convert {@link TgfModel} to json.
@@ -130,14 +143,21 @@ public class TgfConverters {
             {
                 for (TgfNode tgfNode : tgfModel.tgfNodeList.values()) {
                     sb.append(String.format("  -%n"));
-                    sb.append(String.format("" + "    id: \"%s\"%n" + "    name: \"%s\"%n" + "", tgfNode.id, tgfNode.name));
+                    sb.append(String.format(""
+                            + "    id: \"%s\"%n"
+                            + "    name: \"%s\"%n"
+                            + "", tgfNode.id, tgfNode.name));
                 }
             }
             sb.append(String.format("edges:%n"));
             {
                 for (TgfEdge tgfEdge : tgfModel.tgfEdgList) {
                     sb.append(String.format("  -%n"));
-                    sb.append(String.format("" + "    from: \"%s\"%n" + "    to: \"%s\"%n" + "    label: \"%s\"%n" + "", tgfEdge.from, tgfEdge.to, tgfEdge.label));
+                    sb.append(String.format(""
+                            + "    from: \"%s\"%n"
+                            + "    to: \"%s\"%n"
+                            + "    label: \"%s\"%n"
+                            + "", tgfEdge.from, tgfEdge.to, tgfEdge.label));
                 }
             }
             return sb.toString();

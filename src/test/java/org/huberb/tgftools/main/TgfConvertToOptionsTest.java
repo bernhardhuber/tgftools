@@ -3,11 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.huberb.tgftools;
+package org.huberb.tgftools.main;
 
+import org.huberb.tgftools.main.TgfConvertToOptions;
 import java.util.EnumSet;
 import java.util.List;
-import org.huberb.tgftools.TgfConvertToOptions.ConvertToFormat;
+import org.huberb.tgftools.main.TgfConvertToOptions.ConvertToFormat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;

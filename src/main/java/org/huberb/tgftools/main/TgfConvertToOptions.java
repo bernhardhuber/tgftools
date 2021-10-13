@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.huberb.tgftools;
+package org.huberb.tgftools.main;
 
 import java.util.LinkedHashMap;
 import java.util.List;
