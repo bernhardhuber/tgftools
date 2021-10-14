@@ -99,7 +99,7 @@
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                     <!-- note that the main class is set *here* -->
-                                    <mainClass>org.huberb.tgftools.TgfMain</mainClass>
+                                    <mainClass>org.huberb.tgftools.main.TgfMain</mainClass>
                                 </transformer>
                             </transformers>
                             <shadedArtifactAttached>true</shadedArtifactAttached>

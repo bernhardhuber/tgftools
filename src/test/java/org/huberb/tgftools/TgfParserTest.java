@@ -29,9 +29,6 @@ import org.junit.jupiter.params.provider.ValueSource;
  */
 public class TgfParserTest {
 
-  
-
-
     @Test
     public void testTokenize_node() {
         final TgfParser tgfParser = new TgfParser();
@@ -114,5 +111,4 @@ public class TgfParserTest {
         assertEquals("", tgfToken.tgfEdge.getLabel());
     }
 
-  
 }
