@@ -46,7 +46,7 @@ public class TgfConverters {
                 sb.append(String.format("node \"%s\" as %s%n", tgfNode.name, tgfNode.id));
             });
             sb.append(String.format("' edges%n"));
-            tgfModel.tgfEdgList.forEach(tgfEdge -> {
+            tgfModel.tgfEdgeList.forEach(tgfEdge -> {
                 sb.append(String.format("%s --> %s : %s%n", tgfEdge.from, tgfEdge.to, tgfEdge.label));
             });
             sb.append(String.format("%n@enduml%n"));
@@ -71,7 +71,7 @@ public class TgfConverters {
                         + "\"%s\","
                         + "\"\"%n", tgfNode.id, tgfNode.name));
             });
-            tgfModel.tgfEdgList.forEach(tgfEdge -> {
+            tgfModel.tgfEdgeList.forEach(tgfEdge -> {
                 sb.append(String.format("\"edge\","
                         + "\"%s\","
                         + "\"%s\","
@@ -110,7 +110,7 @@ public class TgfConverters {
             sb.append(String.format("\"edges\": [%n"));
             {
                 int i = 0;
-                for (TgfEdge tgfEdge : tgfModel.tgfEdgList) {
+                for (TgfEdge tgfEdge : tgfModel.tgfEdgeList) {
                     if (i > 0) {
                         sb.append(String.format(",%n"));
                     }
@@ -151,7 +151,7 @@ public class TgfConverters {
             }
             sb.append(String.format("edges:%n"));
             {
-                for (TgfEdge tgfEdge : tgfModel.tgfEdgList) {
+                for (TgfEdge tgfEdge : tgfModel.tgfEdgeList) {
                     sb.append(String.format("  -%n"));
                     sb.append(String.format(""
                             + "    from: \"%s\"%n"

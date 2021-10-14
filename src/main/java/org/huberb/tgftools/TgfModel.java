@@ -32,11 +32,11 @@ public class TgfModel implements Serializable {
 
     private static final long serialVersionUID = 20211001L;
     final LinkedHashMap<String, TgfNode> tgfNodeList;
-    final List<TgfEdge> tgfEdgList;
+    final List<TgfEdge> tgfEdgeList;
 
     TgfModel() {
         this.tgfNodeList = new LinkedHashMap<>();
-        this.tgfEdgList = new ArrayList<>();
+        this.tgfEdgeList = new ArrayList<>();
     }
 
     void addNode(TgfNode tgfNode) {
@@ -44,19 +44,19 @@ public class TgfModel implements Serializable {
     }
 
     void addEdge(TgfEdge tgfEdge) {
-        this.tgfEdgList.add(tgfEdge);
+        this.tgfEdgeList.add(tgfEdge);
     }
 
     @Override
     public String toString() {
-        return "TgfModel{" + "tgfNodeList=" + tgfNodeList + ", tgfEdgList=" + tgfEdgList + '}';
+        return "TgfModel{" + "tgfNodeList=" + tgfNodeList + ", tgfEdgeList=" + tgfEdgeList + '}';
     }
 
     @Override
     public int hashCode() {
         int hash = 3;
         hash = 89 * hash + Objects.hashCode(this.tgfNodeList);
-        hash = 89 * hash + Objects.hashCode(this.tgfEdgList);
+        hash = 89 * hash + Objects.hashCode(this.tgfEdgeList);
         return hash;
     }
 
@@ -75,7 +75,7 @@ public class TgfModel implements Serializable {
         if (!Objects.equals(this.tgfNodeList, other.tgfNodeList)) {
             return false;
         }
-        if (!Objects.equals(this.tgfEdgList, other.tgfEdgList)) {
+        if (!Objects.equals(this.tgfEdgeList, other.tgfEdgeList)) {
             return false;
         }
         return true;

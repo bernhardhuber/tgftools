@@ -1,0 +1,38 @@
+703627308 org.huberb:evaluationtable:jar:1.0.0-SNAPSHOT
+1184694332 org.apache.commons:commons-lang3:jar:3.12.0:compile
+540923243 org.apache.commons:commons-jexl3:jar:3.2.1:compile
+244297136 commons-logging:commons-logging:jar:1.2:compile
+1835316563 org.junit.jupiter:junit-jupiter-api:jar:5.7.2:test
+1399225534 org.apiguardian:apiguardian-api:jar:1.1.0:test
+490630452 org.opentest4j:opentest4j:jar:1.2.0:test
+1857007886 org.junit.platform:junit-platform-commons:jar:1.7.2:test
+648630181 org.junit.jupiter:junit-jupiter-params:jar:5.7.2:test
+1179272258 org.junit.jupiter:junit-jupiter-engine:jar:5.7.2:test
+678680178 org.junit.platform:junit-platform-engine:jar:1.7.2:test
+1002911155 io.cucumber:cucumber-java:jar:1.2.6:test
+1467977993 io.cucumber:cucumber-core:jar:1.2.6:test
+1124317168 info.cukes:cucumber-html:jar:0.2.3:test
+1970612644 info.cukes:cucumber-jvm-deps:jar:1.0.5:test
+2006835220 info.cukes:gherkin:jar:2.12.2:test
+1547817015 io.cucumber:cucumber-junit:jar:1.2.6:test
+35864696 junit:junit:jar:4.12:test
+1590129041 org.hamcrest:hamcrest-core:jar:1.3:test
+#
+703627308 1184694332 compile
+540923243 244297136 compile
+703627308 540923243 compile
+1835316563 1399225534 test
+1835316563 490630452 test
+1835316563 1857007886 test
+703627308 1835316563 test
+703627308 648630181 test
+1179272258 678680178 test
+703627308 1179272258 test
+1467977993 1124317168 test
+1467977993 1970612644 test
+1467977993 2006835220 test
+1002911155 1467977993 test
+703627308 1002911155 test
+35864696 1590129041 test
+1547817015 35864696 test
+703627308 1547817015 test

@@ -1,0 +1,20 @@
+1929447269 org.huberb:tgftools:jar:1.0-SNAPSHOT
+1167792250 net.sourceforge.plantuml:plantuml:jar:1.2021.10:compile
+2125346660 info.picocli:picocli:jar:4.6.1:compile
+17680342 org.junit.jupiter:junit-jupiter-api:jar:5.8.1:test
+1332121385 org.opentest4j:opentest4j:jar:1.2.0:test
+1903051549 org.junit.platform:junit-platform-commons:jar:1.8.1:test
+2121551683 org.apiguardian:apiguardian-api:jar:1.1.2:test
+296223788 org.junit.jupiter:junit-jupiter-params:jar:5.8.1:test
+1783418615 org.junit.jupiter:junit-jupiter-engine:jar:5.8.1:test
+1765350920 org.junit.platform:junit-platform-engine:jar:1.8.1:test
+#
+1929447269 1167792250 compile
+1929447269 2125346660 compile
+17680342 1332121385 test
+17680342 1903051549 test
+17680342 2121551683 test
+1929447269 17680342 test
+1929447269 296223788 test
+1783418615 1765350920 test
+1929447269 1783418615 test
