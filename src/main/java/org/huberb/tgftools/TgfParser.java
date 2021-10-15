@@ -18,6 +18,8 @@ package org.huberb.tgftools;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.util.Arrays;
+import java.util.List;
 import org.huberb.tgftools.TgfModel.TgfEdge;
 import org.huberb.tgftools.TgfModel.TgfNode;
 
@@ -57,10 +59,12 @@ public class TgfParser {
         parsingEdges,
         end
     }
+
     /**
      * Current parsing state.
      */
     private ParsingTgfStatus parsingTgfStatus = ParsingTgfStatus.start;
+    final List<String> commentsList = Arrays.asList("--", "'");
 
     /**
      * Parse tgf creating a {@link TgfModel}.
@@ -104,8 +108,9 @@ public class TgfParser {
      */
     enum TgfToken {
         empty,
+        node,
         hashMark,
-        node, edge
+        edge
 
     }
 
@@ -114,21 +119,25 @@ public class TgfParser {
      */
     static class TgfTokenValue {
 
-        TgfToken token;
-        TgfEdge tgfEdge = null;
-        TgfNode tgfNode = null;
+        final TgfToken token;
+        final TgfEdge tgfEdge;
+        final TgfNode tgfNode;
 
         public TgfTokenValue(TgfToken token) {
-            this.token = token;
+            this(token, null, null);
         }
 
         public TgfTokenValue(TgfNode tgfNode) {
-            this.token = TgfToken.node;
-            this.tgfNode = tgfNode;
+            this(TgfToken.node, tgfNode, null);
         }
 
         public TgfTokenValue(TgfEdge tgfEdge) {
-            this.token = TgfToken.edge;
+            this(TgfToken.edge, null, tgfEdge);
+        }
+
+        private TgfTokenValue(TgfToken token, TgfNode tgfNode, TgfEdge tgfEdge) {
+            this.token = token;
+            this.tgfNode = tgfNode;
             this.tgfEdge = tgfEdge;
         }
 
@@ -147,9 +156,9 @@ public class TgfParser {
         TgfEdge tgfEdge = null;
         TgfNode tgfNode = null;
         String trimmedLine = line.trim();
+
         if (trimmedLine.isEmpty()
-                || trimmedLine.startsWith("--")
-                || trimmedLine.startsWith("'")) {
+                || commentsList.contains(trimmedLine)) {
             token = TgfToken.empty;
         } else if (trimmedLine.startsWith("#")) {
             token = TgfToken.hashMark;

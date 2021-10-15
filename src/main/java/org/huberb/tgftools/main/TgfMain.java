@@ -109,7 +109,7 @@ public class TgfMain implements Callable<Integer> {
     void convertTgfModel(TgfModel tgfModel) {
         final List<ConvertToFormat> convertToFormatList = tgfConvertToOptions.createConvertToFormatList();
         if (convertToFormatList.isEmpty()) {
-            String str = Ansi.AUTO.string("@|bold No|@ conversion option specified.");
+            final String str = Ansi.AUTO.string("@|bold No|@ conversion option specified.");
             System.err.println(str);
             return;
         }
@@ -121,7 +121,9 @@ public class TgfMain implements Callable<Integer> {
 
             final Optional<File> outputFile = outputFileList.get(convertToFormat);
             if (!this.overwriteOutputfile && outputFile.isPresent() && outputFile.get().exists()) {
-                String str = Ansi.AUTO.string(String.format("Output file %s already exists, don't overwrite it.", outputFile.toString()));
+                final String str = Ansi.AUTO.string(
+                        String.format("Output file %s already exists, don't overwrite it.", outputFile.toString())
+                );
                 System.err.println(str);
                 continue;
             }
@@ -165,7 +167,7 @@ public class TgfMain implements Callable<Integer> {
      * @return
      */
     Map<ConvertToFormat, Optional<File>> createMappingConvertToFormatToOutputFile(List<ConvertToFormat> convertToFormatList) {
-        int numberOfConversion = convertToFormatList.size();
+        final int numberOfConversion = convertToFormatList.size();
         // define outputFile(s)
         final Map<ConvertToFormat, Optional<File>> convertToOutputFiles = new HashMap<>();
         for (ConvertToFormat convertToFormat : convertToFormatList) {
