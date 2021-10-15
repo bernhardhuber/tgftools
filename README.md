@@ -38,15 +38,25 @@ and edges.
 The file syntax is simple:
 
 ```
-tgf ::= nodes 
-        '#'
-        edges
+file := node_list
+    '#'
+    edge_list
 
-nodes ::= node nodes
-node ::= ID LABEL
+node_list := node_item node_list | node_item | []
+node_item := node_id ' ' [node_name]
+edge_list := edge_item edge_list | edge_item
+edge_item := source_node_id ' ' target_node_id ' ' [edge_name]
+source_node_id := node_id
+target_node_id := node_id
+```
 
-edges ::= edge edges
-edge ::= FROM_NODE_ID TO_NODE_ID [ EDGE_LABEL ]
+An simple example with 2 nodes, and 1 edge is the following:
+
+```
+1 Alice
+2 Bob
+#
+2 1 hello
 ```
 
 ## UseCase Generate TGF from Maven dependency:tree
