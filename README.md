@@ -9,7 +9,7 @@ A simple command line tool reading and converting TGF data to
 * JSON
 * YAML
 
-Following command line options are aveailable
+Following command line options are available
 
 ```
 Usage: tgfMain [-hV] [--convert-csv] [--convert-json] [--convert-puml]
@@ -59,7 +59,7 @@ An simple example with 2 nodes, and 1 edge is the following:
 2 1 hello
 ```
 
-## UseCase Generate TGF from Maven dependency:tree
+## Use Case Generate TGF from Maven dependency:tree
 
 You can generate a maven dependency tree in TGF-Format, like
 
@@ -68,16 +68,15 @@ mvn -DoutputType=tgf -DoutputFile=dependency_tree.tgf dependency:tree
 ```
 
 Next you can convert the convert the file dependency_tree.tgf using this
-commandline tool, like
+command line tool, like
 
 ```
 java -jar target/tgftools-1.0-SNAPSHOT-tgfmain.jar \
   --file=dependency_tree.tgf --convert-puml
 ```
 
-The above comman will read the file dependency_tree.tgf, and 
+The above command will read the file dependency_tree.tgf, and 
 output a plantuml representation to stdout.
-
 
 
 ## References
