@@ -13,21 +13,24 @@ Following command line options are available
 
 ```
 Usage: tgfMain [-hV] [--convert-csv] [--convert-json] [--convert-puml]
-               [--convert-yaml] [--overwrite-outputfile] [-f=<tgfFile>]
-               [-o=<outputFile>]
+               [--convert-puml-mindmap] [--convert-puml-wbs] [--convert-yaml]
+               [--overwrite-outputfile] [-f=<tgfFile>] [-o=<outputFile>]
 parse, and convert TGF file format
-      --convert-csv      convert TGF to csv
-      --convert-json     convert TGF to json
-      --convert-puml     convert TGF to puml
-      --convert-yaml     convert TGF to yaml
-  -f, --file=<tgfFile>   read from TGF file, if not specified read TGF from
-                           stdin
-  -h, --help             Show this help message and exit.
+      --convert-csv        convert TGF to csv
+      --convert-json       convert TGF to json
+      --convert-puml       convert TGF to puml
+      --convert-puml-mindmap
+                           convert TGF to puml mindmap
+      --convert-puml-wbs   convert TGF to puml wbs
+      --convert-yaml       convert TGF to yaml
+  -f, --file=<tgfFile>     read from TGF file, if not specified read TGF from
+                             stdin
+  -h, --help               Show this help message and exit.
   -o, --output=<outputFile>
-                         write to file, if not specified write to stdout
+                           write to file, if not specified write to stdout
       --overwrite-outputfile
-                         overwrite existing output file
-  -V, --version          Print version information and exit.
+                           overwrite existing output file
+  -V, --version            Print version information and exit.
 ```
 
 ## TGF Format
