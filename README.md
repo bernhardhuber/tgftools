@@ -53,7 +53,7 @@ source_node_id := node_id
 target_node_id := node_id
 ```
 
-An simple example with 2 nodes, and 1 edge is the following:
+An simple example with 2 nodes, and 1 edge:
 
 ```
 1 Alice
@@ -70,7 +70,7 @@ You can generate a maven dependency tree in TGF-Format, like
 mvn -DoutputType=tgf -DoutputFile=dependency_tree.tgf dependency:tree
 ```
 
-Next you can convert the convert the file dependency_tree.tgf using this
+Next you can convert the file dependency_tree.tgf using this
 command line tool, like
 
 ```
