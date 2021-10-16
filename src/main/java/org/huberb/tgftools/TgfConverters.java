@@ -15,6 +15,9 @@
  */
 package org.huberb.tgftools;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 import org.huberb.tgftools.TgfModel.TgfEdge;
 import org.huberb.tgftools.TgfModel.TgfNode;
 
@@ -31,9 +34,9 @@ public class TgfConverters {
     }
 
     /**
-     * Converts {@link TgfModel} to puml
+     * Converts {@link TgfModel} to puml node diagram
      */
-    public static class PumlConverter implements ITgfConverterToString {
+    public static class PumlNodeConverter implements ITgfConverterToString {
 
         /**
          * Convert {@link TgfModel} to plant uml.
@@ -59,6 +62,98 @@ public class TgfConverters {
                 }
             });
             sb.append(String.format("%n@enduml%n"));
+            return sb.toString();
+        }
+    }
+
+    /**
+     * Converts {@link TgfModel} to puml mindmap diagram
+     */
+    public static class PumlMindmapConverter implements ITgfConverterToString {
+
+        /**
+         * Convert {@link TgfModel} to plant uml mindmap.
+         *
+         * @param tgfModel
+         * @return
+         */
+        public String convert(TgfModel tgfModel) {
+            TgfModelToLevelMapping tgfModelToLevelMapping = new TgfModelToLevelMapping(tgfModel);
+            final Map<String, Integer> m = tgfModelToLevelMapping.calculateNodeLevel();
+
+            final StringBuilder sb = new StringBuilder();
+            sb.append(String.format("@startmindmap%n%n"));
+
+            sb.append(String.format("%s%n", "* root"));
+
+            m.entrySet().stream()
+                    .sorted((e1, e2) -> e1.getValue().compareTo(e2.getValue()))
+                    .forEach((Entry<String, Integer> e) -> {
+                        TgfNode tgfNodeOpt = tgfModel.tgfNodeList.get(e.getKey());
+                        if (tgfNodeOpt != null) {
+                            final TgfNode tgfNodeFount = tgfNodeOpt;
+                            final Integer level = m.getOrDefault(tgfNodeFount.id, -1);
+                            if (level > 0) {
+                                final StringBuilder levelAsStringBuilder = new StringBuilder();
+                                for (int i = 1; i <= level + 1; i++) {
+                                    levelAsStringBuilder.append("*");
+                                }
+                                sb.append(String.format("%s %s %s%n",
+                                        levelAsStringBuilder.toString(),
+                                        tgfNodeFount.id,
+                                        tgfNodeFount.name)
+                                );
+                            }
+                        }
+                    }
+                    );
+            sb.append(String.format("%n@endmindmap%n"));
+            return sb.toString();
+        }
+    }
+
+    /**
+     * Converts {@link TgfModel} to puml wbs diagram
+     */
+    public static class PumlWbsConverter implements ITgfConverterToString {
+
+        /**
+         * Convert {@link TgfModel} to plant uml mindmap.
+         *
+         * @param tgfModel
+         * @return
+         */
+        public String convert(TgfModel tgfModel) {
+            TgfModelToLevelMapping tgfModelToLevelMapping = new TgfModelToLevelMapping(tgfModel);
+            final Map<String, Integer> m = tgfModelToLevelMapping.calculateNodeLevel();
+
+            final StringBuilder sb = new StringBuilder();
+            sb.append(String.format("@startwbs%n%n"));
+
+            sb.append(String.format("%s%n", "* root"));
+
+            m.entrySet().stream()
+                    .sorted((e1, e2) -> e1.getValue().compareTo(e2.getValue()))
+                    .forEach((Entry<String, Integer> e) -> {
+                        TgfNode tgfNodeOpt = tgfModel.tgfNodeList.get(e.getKey());
+                        if (tgfNodeOpt != null) {
+                            final TgfNode tgfNodeFount = tgfNodeOpt;
+                            final Integer level = m.getOrDefault(tgfNodeFount.id, -1);
+                            if (level > 0) {
+                                final StringBuilder levelAsStringBuilder = new StringBuilder();
+                                for (int i = 1; i <= level + 1; i++) {
+                                    levelAsStringBuilder.append("*");
+                                }
+                                sb.append(String.format("%s %s %s%n",
+                                        levelAsStringBuilder.toString(),
+                                        tgfNodeFount.id,
+                                        tgfNodeFount.name)
+                                );
+                            }
+                        }
+                    }
+                    );
+            sb.append(String.format("%n@endwbs%n"));
             return sb.toString();
         }
     }
@@ -198,4 +293,35 @@ public class TgfConverters {
         return result;
     }
 
+    static class TgfModelToLevelMapping {
+
+        final TgfModel tgfModel;
+
+        public TgfModelToLevelMapping(TgfModel tgfModel) {
+
+            this.tgfModel = tgfModel;
+        }
+
+        Map<String, Integer> calculateNodeLevel() {
+            final Map<String, Integer> tgfNodeLevelMap = new LinkedHashMap<>();
+
+            final TgfNode root = new TgfNode("@root@", "@root@");
+            tgfNodeLevelMap.put(root.id, 0);
+            for (TgfNode tgfNode : tgfModel.tgfNodeList.values()) {
+                tgfNodeLevelMap.put(tgfNode.id, 1);
+            }
+            for (TgfEdge tgfEdge : tgfModel.tgfEdgeList) {
+                final String fromNodeId = tgfEdge.from;
+                final String toNodeId = tgfEdge.to;
+                final Integer fromNodeLevel = tgfNodeLevelMap.get(fromNodeId);
+                final Integer toNodeLevel = tgfNodeLevelMap.get(toNodeId);
+
+                final Integer newToNodeLevel = fromNodeLevel + 1;
+                if (newToNodeLevel > toNodeLevel) {
+                    tgfNodeLevelMap.put(toNodeId, newToNodeLevel);
+                }
+            }
+            return tgfNodeLevelMap;
+        }
+    }
 }

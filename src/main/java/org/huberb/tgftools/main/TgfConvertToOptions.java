@@ -21,6 +21,12 @@ public class TgfConvertToOptions {
     @Option(names = {"--convert-puml"},
             description = "convert TGF to puml")
     private boolean convertToPuml;
+    @Option(names = {"--convert-puml-mindmap"},
+            description = "convert TGF to puml mindmap")
+    private boolean convertToPumlMindmap;
+    @Option(names = {"--convert-puml-wbs"},
+            description = "convert TGF to puml wbs")
+    private boolean convertToPumlWbs;
     @Option(names = {"--convert-csv"},
             description = "convert TGF to csv")
     private boolean convertToCsv;
@@ -33,11 +39,20 @@ public class TgfConvertToOptions {
 
     //---
     public TgfConvertToOptions() {
-        this(false, false, false, false);
+        this(false, false, false,
+                false,
+                false,
+                false);
     }
 
-    public TgfConvertToOptions(boolean convertToPuml, boolean convertToCsv, boolean convertToJson, boolean convertToYaml) {
+    public TgfConvertToOptions(
+            boolean convertToPuml, boolean convertToPumlMindmap, boolean convertToPumlWbs,
+            boolean convertToCsv,
+            boolean convertToJson,
+            boolean convertToYaml) {
         this.convertToPuml = convertToPuml;
+        this.convertToPumlMindmap = convertToPumlMindmap;
+        this.convertToPumlWbs = convertToPumlWbs;
         this.convertToCsv = convertToCsv;
         this.convertToJson = convertToJson;
         this.convertToYaml = convertToYaml;
@@ -55,6 +70,18 @@ public class TgfConvertToOptions {
             }
         },
         puml {
+            @Override
+            String getExtension() {
+                return ".puml";
+            }
+        },
+        pumlMindmap {
+            @Override
+            String getExtension() {
+                return ".puml";
+            }
+        },
+        pumlWbs {
             @Override
             String getExtension() {
                 return ".puml";
@@ -101,6 +128,8 @@ public class TgfConvertToOptions {
     Map<ConvertToFormat, Boolean> createConvertToFormatMap() {
         final Map<ConvertToFormat, Boolean> result = new LinkedHashMap<>();
         result.put(ConvertToFormat.puml, this.convertToPuml);
+        result.put(ConvertToFormat.pumlMindmap, this.convertToPumlMindmap);
+        result.put(ConvertToFormat.pumlWbs, this.convertToPumlWbs);
         result.put(ConvertToFormat.csv, this.convertToCsv);
         result.put(ConvertToFormat.json, this.convertToJson);
         result.put(ConvertToFormat.yaml, this.convertToYaml);

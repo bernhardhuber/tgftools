@@ -32,7 +32,9 @@ import java.util.Optional;
 import java.util.concurrent.Callable;
 import org.huberb.tgftools.TgfConverters.CsvConverter;
 import org.huberb.tgftools.TgfConverters.JsonConverter;
-import org.huberb.tgftools.TgfConverters.PumlConverter;
+import org.huberb.tgftools.TgfConverters.PumlMindmapConverter;
+import org.huberb.tgftools.TgfConverters.PumlNodeConverter;
+import org.huberb.tgftools.TgfConverters.PumlWbsConverter;
 import org.huberb.tgftools.TgfConverters.YamlConverter;
 import org.huberb.tgftools.TgfModel;
 import org.huberb.tgftools.TgfParser;
@@ -129,7 +131,11 @@ public class TgfMain implements Callable<Integer> {
             }
             final String conversionResult;
             if (convertToFormat == ConvertToFormat.puml) {
-                conversionResult = new PumlConverter().convert(tgfModel);
+                conversionResult = new PumlNodeConverter().convert(tgfModel);
+            } else if (convertToFormat == ConvertToFormat.pumlMindmap) {
+                conversionResult = new PumlMindmapConverter().convert(tgfModel);
+            } else if (convertToFormat == ConvertToFormat.pumlWbs) {
+                conversionResult = new PumlWbsConverter().convert(tgfModel);
             } else if (convertToFormat == ConvertToFormat.csv) {
                 conversionResult = new CsvConverter().convert(tgfModel);
             } else if (convertToFormat == ConvertToFormat.json) {

@@ -5,7 +5,6 @@
  */
 package org.huberb.tgftools.main;
 
-import org.huberb.tgftools.main.TgfConvertToOptions;
 import java.util.EnumSet;
 import java.util.List;
 import org.huberb.tgftools.main.TgfConvertToOptions.ConvertToFormat;
@@ -34,9 +33,17 @@ public class TgfConvertToOptionsTest {
      */
     @Test
     public void testCreateConvertToFormatList_all_values() {
-        final TgfConvertToOptions instance = new TgfConvertToOptions(true, true, true, true);
+        final TgfConvertToOptions instance = new TgfConvertToOptions(
+                // puml
+                true, true, true,
+                // csv
+                true,
+                // json
+                true,
+                // yaml
+                true);
         final List<ConvertToFormat> result = instance.createConvertToFormatList();
-        assertEquals(4, result.size());
+        assertEquals(6, result.size());
         // assert result contains all ConvertToFormat values except noformat
         EnumSet.allOf(ConvertToFormat.class)
                 .stream()

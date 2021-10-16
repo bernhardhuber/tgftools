@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import org.huberb.tgftools.TgfConverters.CsvConverter;
 import org.huberb.tgftools.TgfConverters.JsonConverter;
-import org.huberb.tgftools.TgfConverters.PumlConverter;
+import org.huberb.tgftools.TgfConverters.PumlNodeConverter;
 import org.huberb.tgftools.TgfConverters.YamlConverter;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
@@ -44,7 +44,7 @@ public class TgfConvertersTest {
         try (StringReader rr = new StringReader(tgf1)) {
             final TgfParser tgfParser = new TgfParser();
             final TgfModel tgfModel = tgfParser.parse(rr);
-            final String pumlFromTgf = new PumlConverter().convert(tgfModel);
+            final String pumlFromTgf = new PumlNodeConverter().convert(tgfModel);
 
             final String pumlFromTgfNormalized = pumlFromTgf.replace("\r", "").replace("\n", "");
             System_out_println(String.format("puml from tgf%n%s", pumlFromTgf));
@@ -57,6 +57,7 @@ public class TgfConvertersTest {
                     + "@enduml", pumlFromTgfNormalized);
         }
     }
+
     @Test
     public void testConvertToPuml_simple_tgf_no_edge_label() throws IOException {
 
@@ -69,7 +70,7 @@ public class TgfConvertersTest {
         try (StringReader rr = new StringReader(tgf1)) {
             final TgfParser tgfParser = new TgfParser();
             final TgfModel tgfModel = tgfParser.parse(rr);
-            final String pumlFromTgf = new PumlConverter().convert(tgfModel);
+            final String pumlFromTgf = new PumlNodeConverter().convert(tgfModel);
 
             final String pumlFromTgfNormalized = pumlFromTgf.replace("\r", "").replace("\n", "");
             System_out_println(String.format("puml from tgf%n%s", pumlFromTgf));
