@@ -19,7 +19,9 @@ import java.io.IOException;
 import java.io.StringReader;
 import org.huberb.tgftools.TgfConverters.CsvConverter;
 import org.huberb.tgftools.TgfConverters.JsonConverter;
+import org.huberb.tgftools.TgfConverters.PumlMindmapConverter;
 import org.huberb.tgftools.TgfConverters.PumlNodeConverter;
+import org.huberb.tgftools.TgfConverters.PumlWbsConverter;
 import org.huberb.tgftools.TgfConverters.YamlConverter;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
@@ -55,6 +57,54 @@ public class TgfConvertersTest {
                     + "' edges"
                     + "1 --> 2 : a"
                     + "@enduml", pumlFromTgfNormalized);
+        }
+    }
+
+    @Test
+    public void testConvertToPumlMindmap_simple_tgf() throws IOException {
+
+        final String tgf1 = ""
+                + "1 A\n"
+                + "2 B\n"
+                + "#\n"
+                + "1 2 a\n"
+                + "";
+        try (StringReader rr = new StringReader(tgf1)) {
+            final TgfParser tgfParser = new TgfParser();
+            final TgfModel tgfModel = tgfParser.parse(rr);
+            final String pumlFromTgf = new PumlMindmapConverter().convert(tgfModel);
+
+            final String pumlFromTgfNormalized = pumlFromTgf.replace("\r", "").replace("\n", "");
+            System_out_println(String.format("puml mindmap from tgf%n%s", pumlFromTgf));
+            assertEquals("@startmindmap"
+                    + "* root"
+                    + "** 1 A"
+                    + "*** 2 B"
+                    + "@endmindmap", pumlFromTgfNormalized);
+        }
+    }
+
+    @Test
+    public void testConvertToPumlWbs_simple_tgf() throws IOException {
+
+        final String tgf1 = ""
+                + "1 A\n"
+                + "2 B\n"
+                + "#\n"
+                + "1 2 a\n"
+                + "";
+        try (StringReader rr = new StringReader(tgf1)) {
+            final TgfParser tgfParser = new TgfParser();
+            final TgfModel tgfModel = tgfParser.parse(rr);
+            final String pumlFromTgf = new PumlWbsConverter().convert(tgfModel);
+
+            final String pumlFromTgfNormalized = pumlFromTgf.replace("\r", "").replace("\n", "");
+            System_out_println(String.format("puml wbs from tgf%n%s", pumlFromTgf));
+            assertEquals("@startwbs"
+                    + "* root"
+                    + "** 1 A"
+                    + "*** 2 B"
+                    + "@endwbs", pumlFromTgfNormalized);
         }
     }
 

@@ -38,6 +38,8 @@ public class TgfConverters {
      */
     public static class PumlNodeConverter implements ITgfConverterToString {
 
+        final String umlTgfNodeElement = "node";
+
         /**
          * Convert {@link TgfModel} to plant uml.
          *
@@ -50,7 +52,7 @@ public class TgfConverters {
             // nodes
             sb.append(String.format("' nodes%n"));
             tgfModel.tgfNodeList.values().forEach(tgfNode -> {
-                sb.append(String.format("node \"%s\" as %s%n", tgfNode.name, tgfNode.id));
+                sb.append(String.format("%s \"%s\" as %s%n", umlTgfNodeElement, tgfNode.name, tgfNode.id));
             });
             // edges
             sb.append(String.format("' edges%n"));
@@ -69,53 +71,39 @@ public class TgfConverters {
     /**
      * Converts {@link TgfModel} to puml mindmap diagram
      */
-    public static class PumlMindmapConverter implements ITgfConverterToString {
+    public static class PumlMindmapConverter extends PumlMindmapWbsConverter {
 
-        /**
-         * Convert {@link TgfModel} to plant uml mindmap.
-         *
-         * @param tgfModel
-         * @return
-         */
-        public String convert(TgfModel tgfModel) {
-            TgfModelToLevelMapping tgfModelToLevelMapping = new TgfModelToLevelMapping(tgfModel);
-            final Map<String, Integer> m = tgfModelToLevelMapping.calculateNodeLevel();
+        final String startElement = "@startmindmap";
+        final String endElement = "@endmindmap";
 
-            final StringBuilder sb = new StringBuilder();
-            sb.append(String.format("@startmindmap%n%n"));
-
-            sb.append(String.format("%s%n", "* root"));
-
-            m.entrySet().stream()
-                    .sorted((e1, e2) -> e1.getValue().compareTo(e2.getValue()))
-                    .forEach((Entry<String, Integer> e) -> {
-                        TgfNode tgfNodeOpt = tgfModel.tgfNodeList.get(e.getKey());
-                        if (tgfNodeOpt != null) {
-                            final TgfNode tgfNodeFount = tgfNodeOpt;
-                            final Integer level = m.getOrDefault(tgfNodeFount.id, -1);
-                            if (level > 0) {
-                                final StringBuilder levelAsStringBuilder = new StringBuilder();
-                                for (int i = 1; i <= level + 1; i++) {
-                                    levelAsStringBuilder.append("*");
-                                }
-                                sb.append(String.format("%s %s %s%n",
-                                        levelAsStringBuilder.toString(),
-                                        tgfNodeFount.id,
-                                        tgfNodeFount.name)
-                                );
-                            }
-                        }
-                    }
-                    );
-            sb.append(String.format("%n@endmindmap%n"));
-            return sb.toString();
+        public PumlMindmapConverter() {
+            super("@startmindmap", "@endmindmap");
         }
     }
 
     /**
      * Converts {@link TgfModel} to puml wbs diagram
      */
-    public static class PumlWbsConverter implements ITgfConverterToString {
+    public static class PumlWbsConverter extends PumlMindmapWbsConverter {
+
+        public PumlWbsConverter() {
+            super("@startwbs", "@endwbs");
+        }
+
+    }
+
+    /**
+     * Converts {@link TgfModel} to puml mindmap or wbs diagram
+     */
+    abstract static class PumlMindmapWbsConverter implements ITgfConverterToString {
+
+        final String startElement;
+        final String endElement;
+
+        public PumlMindmapWbsConverter(String startElement, String endElement) {
+            this.startElement = startElement;
+            this.endElement = endElement;
+        }
 
         /**
          * Convert {@link TgfModel} to plant uml mindmap.
@@ -124,11 +112,11 @@ public class TgfConverters {
          * @return
          */
         public String convert(TgfModel tgfModel) {
-            TgfModelToLevelMapping tgfModelToLevelMapping = new TgfModelToLevelMapping(tgfModel);
+            final TgfModelToLevelMapping tgfModelToLevelMapping = new TgfModelToLevelMapping(tgfModel);
             final Map<String, Integer> m = tgfModelToLevelMapping.calculateNodeLevel();
 
             final StringBuilder sb = new StringBuilder();
-            sb.append(String.format("@startwbs%n%n"));
+            sb.append(String.format("%s%n%n", startElement));
 
             sb.append(String.format("%s%n", "* root"));
 
@@ -140,12 +128,9 @@ public class TgfConverters {
                             final TgfNode tgfNodeFount = tgfNodeOpt;
                             final Integer level = m.getOrDefault(tgfNodeFount.id, -1);
                             if (level > 0) {
-                                final StringBuilder levelAsStringBuilder = new StringBuilder();
-                                for (int i = 1; i <= level + 1; i++) {
-                                    levelAsStringBuilder.append("*");
-                                }
+                                final String levelAsStringBuilder = levelStars(level + 1);
                                 sb.append(String.format("%s %s %s%n",
-                                        levelAsStringBuilder.toString(),
+                                        levelAsStringBuilder,
                                         tgfNodeFount.id,
                                         tgfNodeFount.name)
                                 );
@@ -153,8 +138,16 @@ public class TgfConverters {
                         }
                     }
                     );
-            sb.append(String.format("%n@endwbs%n"));
+            sb.append(String.format("%n%s%n", endElement));
             return sb.toString();
+        }
+
+        protected String levelStars(int level) {
+            final StringBuilder levelAsStringBuilder = new StringBuilder();
+            for (int i = 1; i <= level; i++) {
+                levelAsStringBuilder.append("*");
+            }
+            return levelAsStringBuilder.toString();
         }
     }
 
