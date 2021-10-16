@@ -57,6 +57,31 @@ public class TgfConvertersTest {
                     + "@enduml", pumlFromTgfNormalized);
         }
     }
+    @Test
+    public void testConvertToPuml_simple_tgf_no_edge_label() throws IOException {
+
+        final String tgf1 = ""
+                + "1 A\n"
+                + "2 B\n"
+                + "#\n"
+                + "1 2\n"
+                + "";
+        try (StringReader rr = new StringReader(tgf1)) {
+            final TgfParser tgfParser = new TgfParser();
+            final TgfModel tgfModel = tgfParser.parse(rr);
+            final String pumlFromTgf = new PumlConverter().convert(tgfModel);
+
+            final String pumlFromTgfNormalized = pumlFromTgf.replace("\r", "").replace("\n", "");
+            System_out_println(String.format("puml from tgf%n%s", pumlFromTgf));
+            assertEquals("@startuml"
+                    + "' nodes"
+                    + "node \"A\" as 1"
+                    + "node \"B\" as 2"
+                    + "' edges"
+                    + "1 --> 2"
+                    + "@enduml", pumlFromTgfNormalized);
+        }
+    }
 
     @Test
     public void testConvertToCsv_simple_tgf() throws IOException {

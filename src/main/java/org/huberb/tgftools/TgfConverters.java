@@ -52,7 +52,11 @@ public class TgfConverters {
             // edges
             sb.append(String.format("' edges%n"));
             tgfModel.tgfEdgeList.forEach(tgfEdge -> {
-                sb.append(String.format("%s --> %s : %s%n", tgfEdge.from, tgfEdge.to, tgfEdge.label));
+                if (stringIsBlank(tgfEdge.label)) {
+                    sb.append(String.format("%s --> %s%n", tgfEdge.from, tgfEdge.to));
+                } else {
+                    sb.append(String.format("%s --> %s : %s%n", tgfEdge.from, tgfEdge.to, tgfEdge.label));
+                }
             });
             sb.append(String.format("%n@enduml%n"));
             return sb.toString();
@@ -183,4 +187,15 @@ public class TgfConverters {
             return sb.toString();
         }
     }
+
+    static boolean stringIsEmpty(String s) {
+        boolean result = s == null || (s != null && s.isEmpty());
+        return result;
+    }
+
+    static boolean stringIsBlank(String s) {
+        boolean result = s == null || (s != null && s.trim().isEmpty());
+        return result;
+    }
+
 }
