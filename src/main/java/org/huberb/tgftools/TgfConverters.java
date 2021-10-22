@@ -73,9 +73,6 @@ public class TgfConverters {
      */
     public static class PumlMindmapConverter extends PumlMindmapWbsConverter {
 
-        final String startElement = "@startmindmap";
-        final String endElement = "@endmindmap";
-
         public PumlMindmapConverter() {
             super("@startmindmap", "@endmindmap");
         }
@@ -97,8 +94,8 @@ public class TgfConverters {
      */
     abstract static class PumlMindmapWbsConverter implements ITgfConverterToString {
 
-        final String startElement;
-        final String endElement;
+        private final String startElement;
+        private final String endElement;
 
         public PumlMindmapWbsConverter(String startElement, String endElement) {
             this.startElement = startElement;
@@ -111,6 +108,7 @@ public class TgfConverters {
          * @param tgfModel
          * @return
          */
+        @Override
         public String convert(TgfModel tgfModel) {
             final TgfModelToLevelMapping tgfModelToLevelMapping = new TgfModelToLevelMapping(tgfModel);
             final Map<String, Integer> m = tgfModelToLevelMapping.calculateNodeLevel();
@@ -194,6 +192,7 @@ public class TgfConverters {
          * @param tgfModel
          * @return
          */
+        @Override
         public String convert(TgfModel tgfModel) {
             final StringBuilder sb = new StringBuilder();
             sb.append(String.format("{%n"));
@@ -246,6 +245,7 @@ public class TgfConverters {
          * @param tgfModel
          * @return
          */
+        @Override
         public String convert(TgfModel tgfModel) {
             final StringBuilder sb = new StringBuilder();
             sb.append(String.format("" + "## YAML Template.%n" + "---%n"));
