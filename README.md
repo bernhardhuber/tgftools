@@ -94,7 +94,7 @@ The column *label* is alway empty for a node node entry.
 For an edge entry *id_form* describes the start node of the edge, *name_to* describes the end node of the edge. 
 Finally *label* describes the optional label of the edge.
 
-Example CSV
+### Example CSV
 
 ```
 "type","id_from","name_to","label"
@@ -117,12 +117,105 @@ Example CSV
 "edge","244577237","1970377948","test"
 ```
 
+## Use Case Convert TGF to PUML
+
+You can convert a TGF file to PLANTUML using the command line option 
+--convert-puml.
+
+### Example PUML
+
+```
+@startuml
+
+' nodes
+node "org.huberb:tgftools:jar:1.0-SNAPSHOT" as 244577237
+node "info.picocli:picocli:jar:4.6.1:compile" as 1612496268
+node "org.junit.jupiter:junit-jupiter-api:jar:5.8.1:test" as 13692003
+node "org.opentest4j:opentest4j:jar:1.2.0:test" as 94748968
+node "org.junit.platform:junit-platform-commons:jar:1.8.1:test" as 1944815218
+node "org.apiguardian:apiguardian-api:jar:1.1.2:test" as 1497558532
+node "org.junit.jupiter:junit-jupiter-params:jar:5.8.1:test" as 1584833211
+node "org.junit.jupiter:junit-jupiter-engine:jar:5.8.1:test" as 1970377948
+node "org.junit.platform:junit-platform-engine:jar:1.8.1:test" as 1518752790
+' edges
+244577237 --> 1612496268 : compile
+13692003 --> 94748968 : test
+13692003 --> 1944815218 : test
+13692003 --> 1497558532 : test
+244577237 --> 13692003 : test
+244577237 --> 1584833211 : test
+1970377948 --> 1518752790 : test
+244577237 --> 1970377948 : test
+
+@enduml
+```
+
+### Example Rendered PUML
+
+![PUML](tgftools-dependency-tree.tgf.png)
+
+## Use Case Convert TGF to PUML WBS
+
+You can convert a TGF file to PUML wbs (work breakdown structure) using the command line option 
+--convert-puml-wbs.
+
+### Example PUML WBS
+
+```
+@startwbs
+
+* root
+** 244577237 org.huberb:tgftools:jar:1.0-SNAPSHOT
+*** 1612496268 info.picocli:picocli:jar:4.6.1:compile
+*** 13692003 org.junit.jupiter:junit-jupiter-api:jar:5.8.1:test
+*** 94748968 org.opentest4j:opentest4j:jar:1.2.0:test
+*** 1944815218 org.junit.platform:junit-platform-commons:jar:1.8.1:test
+*** 1497558532 org.apiguardian:apiguardian-api:jar:1.1.2:test
+*** 1584833211 org.junit.jupiter:junit-jupiter-params:jar:5.8.1:test
+*** 1970377948 org.junit.jupiter:junit-jupiter-engine:jar:5.8.1:test
+*** 1518752790 org.junit.platform:junit-platform-engine:jar:1.8.1:test
+
+@endwbs
+```
+
+### Example Rendered PUML WBS
+
+![PLANTUML](tgftools-dependency-tree.tgf.wbs.png)
+
+## Use Case Convert TGF to PUML MINDMAP
+
+You can convert a TGF file to PUML using the command line option 
+--convert-puml-mindmap.
+
+### Example PUML MINDMAP
+
+```
+@startmindmap
+
+* root
+** 244577237 org.huberb:tgftools:jar:1.0-SNAPSHOT
+*** 1612496268 info.picocli:picocli:jar:4.6.1:compile
+*** 13692003 org.junit.jupiter:junit-jupiter-api:jar:5.8.1:test
+*** 94748968 org.opentest4j:opentest4j:jar:1.2.0:test
+*** 1944815218 org.junit.platform:junit-platform-commons:jar:1.8.1:test
+*** 1497558532 org.apiguardian:apiguardian-api:jar:1.1.2:test
+*** 1584833211 org.junit.jupiter:junit-jupiter-params:jar:5.8.1:test
+*** 1970377948 org.junit.jupiter:junit-jupiter-engine:jar:5.8.1:test
+*** 1518752790 org.junit.platform:junit-platform-engine:jar:1.8.1:test
+
+@endmindmap
+```
+
+### Example Rendered PLANTUML MINDMAP
+
+![PLANTUML](tgftools-dependency-tree.tgf.mindmap.png)
+
 ## Use Case Convert TGF to JSON
 
 You can convert a TGF file to CSV using the command line option 
 --convert-json.
 
-Example JSON
+### Example JSON
 
 ```
 {
@@ -155,7 +248,7 @@ Example JSON
 You can convert a TGF file to CSV using the command line option 
 --convert-yaml.
 
-Example YAML
+### Example YAML
 
 ```
 ## YAML Template.
