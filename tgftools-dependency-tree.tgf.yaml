@@ -1,0 +1,64 @@
+## YAML Template.
+---
+nodes:
+  -
+    id: "244577237"
+    name: "org.huberb:tgftools:jar:1.0-SNAPSHOT"
+  -
+    id: "1612496268"
+    name: "info.picocli:picocli:jar:4.6.1:compile"
+  -
+    id: "13692003"
+    name: "org.junit.jupiter:junit-jupiter-api:jar:5.8.1:test"
+  -
+    id: "94748968"
+    name: "org.opentest4j:opentest4j:jar:1.2.0:test"
+  -
+    id: "1944815218"
+    name: "org.junit.platform:junit-platform-commons:jar:1.8.1:test"
+  -
+    id: "1497558532"
+    name: "org.apiguardian:apiguardian-api:jar:1.1.2:test"
+  -
+    id: "1584833211"
+    name: "org.junit.jupiter:junit-jupiter-params:jar:5.8.1:test"
+  -
+    id: "1970377948"
+    name: "org.junit.jupiter:junit-jupiter-engine:jar:5.8.1:test"
+  -
+    id: "1518752790"
+    name: "org.junit.platform:junit-platform-engine:jar:1.8.1:test"
+edges:
+  -
+    from: "244577237"
+    to: "1612496268"
+    label: "compile"
+  -
+    from: "13692003"
+    to: "94748968"
+    label: "test"
+  -
+    from: "13692003"
+    to: "1944815218"
+    label: "test"
+  -
+    from: "13692003"
+    to: "1497558532"
+    label: "test"
+  -
+    from: "244577237"
+    to: "13692003"
+    label: "test"
+  -
+    from: "244577237"
+    to: "1584833211"
+    label: "test"
+  -
+    from: "1970377948"
+    to: "1518752790"
+    label: "test"
+  -
+    from: "244577237"
+    to: "1970377948"
+    label: "test"
+

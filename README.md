@@ -81,6 +81,41 @@ java -jar target/tgftools-1.0-SNAPSHOT-tgfmain.jar \
 The above command will read the file dependency_tree.tgf, and 
 output a plantuml representation to stdout.
 
+## Use Case Convert TGF to CSV
+
+You can convert a TGF file to CSV using the command line option 
+--convert-to-csv.
+
+The first column type describes if the csv row describes either a *node*, or an *edge*.
+
+For a node entry *id_from* describes the *node_id*, and *name_to* describes the node name. 
+The column *label* is alway empty for a node node entry.
+
+For an edge entry *id_form* describes the start node of the edge, *name_to* describes the end node of the edge. 
+Finally *label* describes the optional label of the edge.
+
+Example CSV
+
+```
+"type","id_from","name_to","label"
+"node","244577237","org.huberb:tgftools:jar:1.0-SNAPSHOT",""
+"node","1612496268","info.picocli:picocli:jar:4.6.1:compile",""
+"node","13692003","org.junit.jupiter:junit-jupiter-api:jar:5.8.1:test",""
+"node","94748968","org.opentest4j:opentest4j:jar:1.2.0:test",""
+"node","1944815218","org.junit.platform:junit-platform-commons:jar:1.8.1:test",""
+"node","1497558532","org.apiguardian:apiguardian-api:jar:1.1.2:test",""
+"node","1584833211","org.junit.jupiter:junit-jupiter-params:jar:5.8.1:test",""
+"node","1970377948","org.junit.jupiter:junit-jupiter-engine:jar:5.8.1:test",""
+"node","1518752790","org.junit.platform:junit-platform-engine:jar:1.8.1:test",""
+"edge","244577237","1612496268","compile"
+"edge","13692003","94748968","test"
+"edge","13692003","1944815218","test"
+"edge","13692003","1497558532","test"
+"edge","244577237","13692003","test"
+"edge","244577237","1584833211","test"
+"edge","1970377948","1518752790","test"
+"edge","244577237","1970377948","test"
+```
 
 ## References
 
