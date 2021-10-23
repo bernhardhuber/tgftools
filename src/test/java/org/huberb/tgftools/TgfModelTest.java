@@ -8,7 +8,9 @@ package org.huberb.tgftools;
 import org.huberb.tgftools.TgfModel.TgfEdge;
 import org.huberb.tgftools.TgfModel.TgfNode;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -22,8 +24,8 @@ public class TgfModelTest {
      */
     @Test
     public void testAddNode() {
-        TgfNode tgfNode = new TgfNode("id1", "name1");
-        TgfModel instance = new TgfModel();
+        final TgfNode tgfNode = new TgfNode("id1", "name1");
+        final TgfModel instance = new TgfModel();
         instance.addNode(tgfNode);
 
         assertEquals(0, instance.tgfEdgeList.size());
@@ -35,8 +37,8 @@ public class TgfModelTest {
      */
     @Test
     public void testAddEdge() {
-        TgfEdge tgfEdge = new TgfEdge("from1", "to1", "label1");
-        TgfModel instance = new TgfModel();
+        final TgfEdge tgfEdge = new TgfEdge("from1", "to1", "label1");
+        final TgfModel instance = new TgfModel();
         instance.addEdge(tgfEdge);
         assertEquals(1, instance.tgfEdgeList.size());
         assertEquals(0, instance.tgfNodeList.size());
@@ -47,12 +49,8 @@ public class TgfModelTest {
      */
     @Test
     public void testToString() {
-        TgfNode tgfNode = new TgfNode("id1", "name1");
-        TgfEdge tgfEdge = new TgfEdge("from1", "to1", "label1");
-        TgfModel instance = new TgfModel();
-        instance.addNode(tgfNode);
-        instance.addEdge(tgfEdge);
-        String expResult = "TgfModel{"
+        final TgfModel instance = createSimpleTgfModel1();
+        final String expResult = "TgfModel{"
                 + "tgfNodeList="
                 + "{"
                 + "id1=TgfNode{id=id1, name=name1}"
@@ -62,7 +60,7 @@ public class TgfModelTest {
                 + "TgfEdge{from=from1, to=to1, label=label1}"
                 + "]"
                 + "}";
-        String result = instance.toString();
+        final String result = instance.toString();
         assertEquals(expResult, result);
     }
 
@@ -71,9 +69,13 @@ public class TgfModelTest {
      */
     @Test
     public void testHashCode() {
-        TgfModel instance = new TgfModel();
-        int result = instance.hashCode();
-        assertNotEquals(0, result, "" + result);
+        final Object obj = new TgfModel();
+        final int resultObj = obj.hashCode();
+        final TgfModel instance = createSimpleTgfModel1();
+        final int resultInstance = instance.hashCode();
+        assertNotEquals(0, resultInstance, "" + resultInstance);
+
+        assertNotEquals(resultObj, resultInstance);
     }
 
     /**
@@ -81,9 +83,19 @@ public class TgfModelTest {
      */
     @Test
     public void testEquals() {
-        Object obj = new TgfModel();
-        TgfModel instance = new TgfModel();
-        assertEquals(true, instance.equals(obj));
+        final Object obj = new TgfModel();
+        final TgfModel instance = createSimpleTgfModel1();
+        assertTrue(obj.equals(obj));
+        assertTrue(instance.equals(instance));
+        assertFalse(instance.equals(obj));
     }
 
+    TgfModel createSimpleTgfModel1() {
+        final TgfNode tgfNode = new TgfNode("id1", "name1");
+        final TgfEdge tgfEdge = new TgfEdge("from1", "to1", "label1");
+        final TgfModel instance = new TgfModel();
+        instance.addNode(tgfNode);
+        instance.addEdge(tgfEdge);
+        return instance;
+    }
 }
