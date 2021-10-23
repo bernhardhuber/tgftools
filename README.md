@@ -243,6 +243,12 @@ You can convert a TGF file to CSV using the command line option
 }
 ```
 
+### Example Reendered JSON
+
+Using plantuml feature "@startjson/@endjson" the JSON output is rendered
+
+![JSON](tgftools-dependency-tree.tgf.json.png)
+
 ## Use Case Convert TGF to YAML
 
 You can convert a TGF file to CSV using the command line option 
@@ -315,6 +321,13 @@ edges:
     to: "1970377948"
     label: "test"
 ```
+
+### Example Reendered YAML
+
+Using plantuml feature "@startyaml/@endyaml" the JSON output is rendered
+
+![JSON](tgftools-dependency-tree.tgf.yaml.png)
+
 
 ## References
 
