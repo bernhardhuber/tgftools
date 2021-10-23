@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
@@ -43,7 +44,9 @@ import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Help.Ansi;
 import picocli.CommandLine.Mixin;
+import picocli.CommandLine.Model.CommandSpec;
 import picocli.CommandLine.Option;
+import picocli.CommandLine.Spec;
 
 /**
  * Simple commandline application for reading and converting TGF files.
@@ -55,6 +58,9 @@ import picocli.CommandLine.Option;
         version = "tgfMain 1.0-SNAPSHOT",
         description = "parse, and convert TGF file format")
 public class TgfMain implements Callable<Integer> {
+
+    @Spec
+    CommandSpec spec;
 
     @Option(names = {"-f", "--file"},
             description = "read from TGF file, if not specified read TGF from stdin")
@@ -78,6 +84,7 @@ public class TgfMain implements Callable<Integer> {
     public static void main(String[] args) {
         int exitCode = new CommandLine(new TgfMain()).execute(args);
         System.exit(exitCode);
+
     }
 
     /**
@@ -92,15 +99,11 @@ public class TgfMain implements Callable<Integer> {
         try (final Reader tgfReader = new ReaderFactory(tgfFile).createUtf8Reader()) {
             final TgfModel tgfModel = tgfParser.parse(tgfReader);
             convertTgfModel(tgfModel);
+        } finally {
+            this.spec.commandLine().getOut().flush();
+            this.spec.commandLine().getErr().flush();
         }
         return 0;
-    }
-
-    String evaluteWriteToFilenameOrStdin() {
-        final String result = Optional.ofNullable(this.tgfFile)
-                .map((f) -> f.toString())
-                .orElse("stdin");
-        return result;
     }
 
     /**
@@ -111,8 +114,9 @@ public class TgfMain implements Callable<Integer> {
     void convertTgfModel(TgfModel tgfModel) {
         final List<ConvertToFormat> convertToFormatList = tgfConvertToOptions.createConvertToFormatList();
         if (convertToFormatList.isEmpty()) {
-            final String str = Ansi.AUTO.string("@|bold No|@ conversion option specified.");
-            System.err.println(str);
+            final String str = String.format("No conversion option was specified.%n"
+                    + "Use one of the conversion-options \"--convert-*\"");
+            System_err_println(str);
             return;
         }
         //---
@@ -126,7 +130,7 @@ public class TgfMain implements Callable<Integer> {
                 final String str = Ansi.AUTO.string(
                         String.format("Output file %s already exists, don't overwrite it.", outputFile.toString())
                 );
-                System.err.println(str);
+                System_err_println(str);
                 continue;
             }
             final String conversionResult;
@@ -146,17 +150,17 @@ public class TgfMain implements Callable<Integer> {
                 conversionResult = null;
             }
             if (conversionResult != null) {
-                System.err.println(String.format(">>> file: %s, format: %s",
+                System_err_println(String.format(">>> file: %s, format: %s",
                         evaluteWriteToFilenameOrStdin(),
                         convertToFormat));
                 if (!outputFile.isPresent()) {
-                    System.out.println(conversionResult);
+                    System_out_println(conversionResult);
                 } else {
                     try (final FileOutputStream fos = new FileOutputStream(outputFile.get());
                             final OutputStreamWriter writer = new OutputStreamWriter(fos, StandardCharsets.UTF_8)) {
                         writer.write(conversionResult);
                     } catch (IOException ioex) {
-                        System.err.println(String.format("Cannot write to file: %s:%n %s",
+                        System_err_println(String.format("Cannot write to file: %s:%n %s",
                                 outputFile.get(),
                                 ioex.getMessage()
                         ));
@@ -164,6 +168,13 @@ public class TgfMain implements Callable<Integer> {
                 }
             }
         }
+    }
+
+    String evaluteWriteToFilenameOrStdin() {
+        final String result = Optional.ofNullable(this.tgfFile)
+                .map((f) -> f.toString())
+                .orElse("stdin");
+        return result;
     }
 
     /**
@@ -190,6 +201,26 @@ public class TgfMain implements Callable<Integer> {
             }
         }
         return convertToOutputFiles;
+    }
+
+    /**
+     * Use picocli error print writer for printing to stderr.
+     *
+     * @param str
+     */
+    private void System_err_println(String str) {
+        final PrintWriter pw = spec.commandLine().getErr();
+        pw.println(str);
+    }
+
+    /**
+     * Use picocli error print writer for printing to stdout.
+     *
+     * @param str
+     */
+    private void System_out_println(String conversionResult) {
+        final PrintWriter pw = spec.commandLine().getOut();
+        pw.println(conversionResult);
     }
 
     /**
