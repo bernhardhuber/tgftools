@@ -333,3 +333,4 @@ Using plantuml feature "@startyaml/@endyaml" the JSON output is rendered
 
 * TGF : https://en.wikipedia.org/wiki/Trivial_Graph_Format
 * PLANTUML : https://plantuml.com/
+* PICOCLI : https://picocli.info/
