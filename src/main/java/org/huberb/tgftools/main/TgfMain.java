@@ -60,7 +60,7 @@ import picocli.CommandLine.Spec;
 public class TgfMain implements Callable<Integer> {
 
     @Spec
-    CommandSpec spec;
+    private CommandSpec spec;
 
     @Option(names = {"-f", "--file"},
             description = "read from TGF file, if not specified read TGF from stdin")
@@ -99,11 +99,11 @@ public class TgfMain implements Callable<Integer> {
         try (final Reader tgfReader = new ReaderFactory(tgfFile).createUtf8Reader()) {
             final TgfModel tgfModel = tgfParser.parse(tgfReader);
             convertTgfModel(tgfModel);
+            return 0;
         } finally {
             this.spec.commandLine().getOut().flush();
             this.spec.commandLine().getErr().flush();
         }
-        return 0;
     }
 
     /**
