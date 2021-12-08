@@ -49,7 +49,7 @@ import picocli.CommandLine.Option;
 import picocli.CommandLine.Spec;
 
 /**
- * Simple commandline application for reading and converting TGF files.
+ * Simple command line application for reading and converting TGF files.
  *
  * @author berni3
  */
