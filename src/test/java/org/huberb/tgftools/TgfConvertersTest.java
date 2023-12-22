@@ -18,6 +18,8 @@ package org.huberb.tgftools;
 import java.io.IOException;
 import java.io.StringReader;
 import org.huberb.tgftools.TgfConverters.CsvConverter;
+import org.huberb.tgftools.TgfConverters.DatalogPropertySchemaConverter;
+import org.huberb.tgftools.TgfConverters.DatalogValueSchemaConverter;
 import org.huberb.tgftools.TgfConverters.JsonConverter;
 import org.huberb.tgftools.TgfConverters.PumlMindmapConverter;
 import org.huberb.tgftools.TgfConverters.PumlNodeConverter;
@@ -34,15 +36,14 @@ public class TgfConvertersTest {
 
     private final boolean outputSystemOut = true;
 
-    @Test
-    public void testConvertToPuml_simple_tgf() throws IOException {
-
         final String tgf1 = ""
                 + "1 A\n"
                 + "2 B\n"
                 + "#\n"
                 + "1 2 a\n"
                 + "";
+    @Test
+    public void testPumlNodeConverter_simple_tgf() throws IOException {
         try (StringReader rr = new StringReader(tgf1)) {
             final TgfParser tgfParser = new TgfParser();
             final TgfModel tgfModel = tgfParser.parse(rr);
@@ -61,14 +62,7 @@ public class TgfConvertersTest {
     }
 
     @Test
-    public void testConvertToPumlMindmap_simple_tgf() throws IOException {
-
-        final String tgf1 = ""
-                + "1 A\n"
-                + "2 B\n"
-                + "#\n"
-                + "1 2 a\n"
-                + "";
+    public void testPumlMindmapConverter_simple_tgf() throws IOException {
         try (StringReader rr = new StringReader(tgf1)) {
             final TgfParser tgfParser = new TgfParser();
             final TgfModel tgfModel = tgfParser.parse(rr);
@@ -85,14 +79,7 @@ public class TgfConvertersTest {
     }
 
     @Test
-    public void testConvertToPumlWbs_simple_tgf() throws IOException {
-
-        final String tgf1 = ""
-                + "1 A\n"
-                + "2 B\n"
-                + "#\n"
-                + "1 2 a\n"
-                + "";
+    public void testPumlWbsConverter_simple_tgf() throws IOException {
         try (StringReader rr = new StringReader(tgf1)) {
             final TgfParser tgfParser = new TgfParser();
             final TgfModel tgfModel = tgfParser.parse(rr);
@@ -110,14 +97,13 @@ public class TgfConvertersTest {
 
     @Test
     public void testConvertToPuml_simple_tgf_no_edge_label() throws IOException {
-
-        final String tgf1 = ""
+        final String tgf2 = ""
                 + "1 A\n"
                 + "2 B\n"
                 + "#\n"
                 + "1 2\n"
                 + "";
-        try (StringReader rr = new StringReader(tgf1)) {
+        try (StringReader rr = new StringReader(tgf2)) {
             final TgfParser tgfParser = new TgfParser();
             final TgfModel tgfModel = tgfParser.parse(rr);
             final String pumlFromTgf = new PumlNodeConverter().convert(tgfModel);
@@ -135,14 +121,7 @@ public class TgfConvertersTest {
     }
 
     @Test
-    public void testConvertToCsv_simple_tgf() throws IOException {
-
-        final String tgf1 = ""
-                + "1 A\n"
-                + "2 B\n"
-                + "#\n"
-                + "1 2 a\n"
-                + "";
+    public void testCsvConverter_simple_tgf() throws IOException {
         try (StringReader rr = new StringReader(tgf1)) {
             final TgfParser tgfParser = new TgfParser();
             final TgfModel tgfModel = tgfParser.parse(rr);
@@ -158,14 +137,7 @@ public class TgfConvertersTest {
     }
 
     @Test
-    public void testConvertToJson_simple_tgf() throws IOException {
-
-        final String tgf1 = ""
-                + "1 A\n"
-                + "2 B\n"
-                + "#\n"
-                + "1 2 a\n"
-                + "";
+    public void testJsonConverter_simple_tgf() throws IOException {
         try (StringReader rr = new StringReader(tgf1)) {
             final TgfParser tgfParser = new TgfParser();
             final TgfModel tgfModel = tgfParser.parse(rr);
@@ -186,13 +158,6 @@ public class TgfConvertersTest {
 
     @Test
     public void testConvertToYaml_simple_tgf() throws IOException {
-
-        final String tgf1 = ""
-                + "1 A\n"
-                + "2 B\n"
-                + "#\n"
-                + "1 2 a\n"
-                + "";
         try (StringReader rr = new StringReader(tgf1)) {
             final TgfParser tgfParser = new TgfParser();
             final TgfModel tgfModel = tgfParser.parse(rr);
@@ -214,6 +179,55 @@ public class TgfConvertersTest {
                     + "    from: \"1\""
                     + "    to: \"2\""
                     + "    label: \"a\"", yamlFromTgfNormalized);
+        }
+    }
+
+    @Test
+    public void testDatalogValueSchemaConverter_simple_tgf() throws IOException {
+        try (StringReader rr = new StringReader(tgf1)) {
+            final TgfParser tgfParser = new TgfParser();
+            final TgfModel tgfModel = tgfParser.parse(rr);
+            final String yamlFromTgf = new DatalogValueSchemaConverter().convert(tgfModel);
+
+            final String yamlFromTgfNormalized = yamlFromTgf.replace("\r", "").replace("\n", "");
+            System_out_println(String.format("DatalogValueSchemaConverter from tgf%n%s", yamlFromTgf));
+            assertEquals("% start"
+                    + ""
+                    + "% nodes"
+                    + "node(\"1\",\"A\")."
+                    + "node(\"2\",\"B\")."
+                    + "% edges"
+                    + "edge(\"1\", \"2\")."
+                    + "edgeLabel(\"1\", \"2\", \"a\")."
+                    + ""
+                    + "% end", yamlFromTgfNormalized);
+        }
+    }
+
+    @Test
+    public void testDatalogPropertySchemaConverter_simple_tgf() throws IOException {
+        try (StringReader rr = new StringReader(tgf1)) {
+            final TgfParser tgfParser = new TgfParser();
+            final TgfModel tgfModel = tgfParser.parse(rr);
+            final String yamlFromTgf = new DatalogPropertySchemaConverter().convert(tgfModel);
+
+            final String yamlFromTgfNormalized = yamlFromTgf.replace("\r", "").replace("\n", "");
+            System_out_println(String.format("DatalogPropertySchema from tgf%n%s", yamlFromTgf));
+            assertEquals("% start"
+                    + ""
+                    + "% nodes"
+                    + "tgfdata(\"1\", instanceof, \"node\")."
+                    + "tgfdata(\"1\", name, \"A\")."
+                    + "tgfdata(\"2\", instanceof, \"node\")."
+                    + "tgfdata(\"2\", name, \"B\")."
+                    + "% edges"
+                    + "tgfdata(\"1\", edge, \"2\")."
+                    + "tgfdata(\"1-2\", instanceof, \"edge\")."
+                    + "tgfdata(\"1-2\", from, \"1\")."
+                    + "tgfdata(\"1-2\", to, \"2\")."
+                    + "tgfdata(\"1-2\", label, \"a\")."
+                    + ""
+                    + "% end", yamlFromTgfNormalized);
         }
     }
 
