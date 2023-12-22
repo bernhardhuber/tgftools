@@ -41,9 +41,14 @@ public class TgfConvertToOptionsTest {
                 // json
                 true,
                 // yaml
-                true);
+                true,
+                // datalog value
+                true,
+                // datalog property
+                true
+        );
         final List<ConvertToFormat> result = instance.createConvertToFormatList();
-        assertEquals(6, result.size());
+        assertEquals(8, result.size());
         // assert result contains all ConvertToFormat values except noformat
         EnumSet.allOf(ConvertToFormat.class)
                 .stream()
