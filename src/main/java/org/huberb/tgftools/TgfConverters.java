@@ -28,7 +28,7 @@ import org.huberb.tgftools.TgfModel.TgfNode;
  */
 public class TgfConverters {
 
-    public static interface ITgfConverterToString {
+    public interface ITgfConverterToString {
 
         String convert(TgfModel tgfModel);
     }
@@ -277,13 +277,11 @@ public class TgfConverters {
     }
 
     static boolean stringIsEmpty(String s) {
-        boolean result = s == null || (s != null && s.isEmpty());
-        return result;
+        return s == null || (s != null && s.isEmpty());
     }
 
     static boolean stringIsBlank(String s) {
-        boolean result = s == null || (s != null && s.trim().isEmpty());
-        return result;
+        return s == null || (s != null && s.trim().isEmpty());
     }
 
     static class TgfModelToLevelMapping {

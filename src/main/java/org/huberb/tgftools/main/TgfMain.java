@@ -221,7 +221,7 @@ public class TgfMain implements Callable<Integer> {
     /**
      * Use picocli error print writer for printing to stdout.
      *
-     * @param str
+     * @param conversionResult
      */
     private void System_out_println(String conversionResult) {
         final PrintWriter pw = spec.commandLine().getOut();

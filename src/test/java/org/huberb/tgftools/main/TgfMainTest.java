@@ -61,7 +61,6 @@ public class TgfMainTest {
         assertEquals("", swErr.toString(), "stderr");
         final String swOutAsString = swOut.toString();
         final String m = String.format("stdout helpOption %s, stdout: %s", helpOption, swOutAsString);
-        assertNotEquals(0, swOutAsString, m);
         assertTrue(swOutAsString.contains("Usage:"), m);
         assertTrue(swOutAsString.contains("--convert-"), m);
         assertTrue(swOutAsString.contains("-h"), m);
@@ -88,7 +87,6 @@ public class TgfMainTest {
         {
             final String swOutAsString = swOut.toString();
             final String m = String.format("commandline %s, stdout: %s", commandline, swOutAsString);
-            assertNotEquals(0, swOutAsString, m);
             assertTrue(swOutAsString.contains("\"type\","
                     + "\"id_from\","
                     + "\"name_to\","
@@ -120,7 +118,6 @@ public class TgfMainTest {
         {
             final String swOutAsString = swOut.toString();
             final String m = String.format("commandline %s, stdout: %s", commandline, swOutAsString);
-            assertNotEquals(0, swOutAsString, m);
             assertTrue(swOutAsString.contains("\"nodes\""), m);
             assertTrue(swOutAsString.contains("\"edges\""), m);
             assertTrue(swOutAsString.contains("node"), m);
@@ -150,7 +147,6 @@ public class TgfMainTest {
         {
             final String swOutAsString = swOut.toString();
             final String m = String.format("commandline %s, stderr: %s", commandline, swOutAsString);
-            assertNotEquals(0, swOutAsString, m);
             assertTrue(swOutAsString.contains("nodes:"), m);
             assertTrue(swOutAsString.contains("edges:"), m);
             assertTrue(swOutAsString.contains("\"compile\""), m);
@@ -176,7 +172,6 @@ public class TgfMainTest {
         {
             final String swOutAsString = swOut.toString();
             final String m = String.format("commandline %s, stderr: %s", commandline, swOutAsString);
-            assertNotEquals(0, swOutAsString, m);
             assertTrue(swOutAsString.contains("@startuml"), m);
             assertTrue(swOutAsString.contains("@enduml"), m);
             assertTrue(swOutAsString.contains("nodes"), m);
@@ -206,7 +201,6 @@ public class TgfMainTest {
         {
             final String swOutAsString = swOut.toString();
             final String m = String.format("commandline %s, stderr: %s", commandline, swOutAsString);
-            assertNotEquals(0, swOutAsString, m);
             assertTrue(swOutAsString.contains("@startmindmap"), m);
             assertTrue(swOutAsString.contains("@endmindmap"), m);
             assertTrue(swOutAsString.contains("* root"), m);
@@ -235,7 +229,6 @@ public class TgfMainTest {
         {
             final String swOutAsString = swOut.toString();
             final String m = String.format("commandline %s, stderr: %s", commandline, swOutAsString);
-            assertNotEquals(0, swOutAsString, m);
             assertTrue(swOutAsString.contains("@startwbs"), m);
             assertTrue(swOutAsString.contains("@endwbs"), m);
             assertTrue(swOutAsString.contains("* root"), m);
