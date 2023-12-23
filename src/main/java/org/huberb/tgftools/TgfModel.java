@@ -205,7 +205,27 @@ public class TgfModel implements Serializable {
             }
             return true;
         }
-
     }
 
+    /**
+     * Simple builder for building an {@link TgfModel} instance.
+     */
+    public static class Builder {
+
+        private final TgfModel tgfModel = new TgfModel();
+
+        public Builder node(TgfNode n) {
+            tgfModel.addNode(n);
+            return this;
+        }
+
+        public Builder edge(TgfEdge e) {
+            tgfModel.addEdge(e);
+            return this;
+        }
+
+        public TgfModel build() {
+            return tgfModel;
+        }
+    }
 }

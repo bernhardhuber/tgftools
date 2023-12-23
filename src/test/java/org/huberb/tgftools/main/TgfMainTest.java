@@ -10,6 +10,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -29,6 +30,14 @@ public class TgfMainTest {
     CommandLine cmd;
     StringWriter swOut;
     StringWriter swErr;
+
+    static Function<String, File> createFileFrom = s -> {
+        final File infile = new File("./src/test/resources/", s);
+        String m = "" + infile;
+        assertTrue(infile.exists(), m);
+        assertTrue(infile.canRead(), m);
+        return infile;
+    };
 
     @BeforeEach
     public void setUp() {
@@ -63,7 +72,7 @@ public class TgfMainTest {
 
     @Test
     public void testCommandLine_convert_csv() {
-        final File tgfInputFile = new File("./src/test/resources/", "tgftools-dependency-tree.tgf");
+        final File tgfInputFile = createFileFrom.apply("tgftools-dependency-tree.tgf");
         final List<String> commandline = Arrays.asList(
                 "--convert-csv",
                 String.format("--file=%s", tgfInputFile.getAbsolutePath())
@@ -95,7 +104,7 @@ public class TgfMainTest {
 
     @Test
     public void testCommandLine_convert_json() {
-        final File tgfInputFile = new File("./src/test/resources/", "tgftools-dependency-tree.tgf");
+        final File tgfInputFile = createFileFrom.apply("tgftools-dependency-tree.tgf");
         final List<String> commandline = Arrays.asList(
                 "--convert-json",
                 String.format("--file=%s", tgfInputFile.getAbsolutePath())
@@ -125,7 +134,7 @@ public class TgfMainTest {
 
     @Test
     public void testCommandLine_convert_yaml() {
-        final File tgfInputFile = new File("./src/test/resources/", "tgftools-dependency-tree.tgf");
+        final File tgfInputFile = createFileFrom.apply("tgftools-dependency-tree.tgf");
         final List<String> commandline = Arrays.asList(
                 "--convert-yaml",
                 String.format("--file=%s", tgfInputFile.getAbsolutePath())
@@ -151,7 +160,7 @@ public class TgfMainTest {
 
     @Test
     public void testCommandLine_convert_puml() {
-        final File tgfInputFile = new File("./src/test/resources/", "tgftools-dependency-tree.tgf");
+        final File tgfInputFile = createFileFrom.apply("tgftools-dependency-tree.tgf");
         final List<String> commandline = Arrays.asList(
                 "--convert-puml",
                 String.format("--file=%s", tgfInputFile.getAbsolutePath())
@@ -181,7 +190,7 @@ public class TgfMainTest {
 
     @Test
     public void testCommandLine_convert_puml_mindmap() {
-        final File tgfInputFile = new File("./src/test/resources/", "tgftools-dependency-tree.tgf");
+        final File tgfInputFile = createFileFrom.apply("tgftools-dependency-tree.tgf");
         final List<String> commandline = Arrays.asList(
                 "--convert-puml-mindmap",
                 String.format("--file=%s", tgfInputFile.getAbsolutePath())
@@ -210,7 +219,7 @@ public class TgfMainTest {
 
     @Test
     public void testCommandLine_convert_puml_wbs() {
-        final File tgfInputFile = new File("./src/test/resources/", "tgftools-dependency-tree.tgf");
+        final File tgfInputFile = createFileFrom.apply("tgftools-dependency-tree.tgf");
         final List<String> commandline = Arrays.asList(
                 "--convert-puml-wbs",
                 String.format("--file=%s", tgfInputFile.getAbsolutePath())
