@@ -3,16 +3,16 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.huberb</groupId>
     <artifactId>tgftools</artifactId>
-    <version>0.2.0-SNAPSHOT</version>
+    <version>0.3.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <plantuml.version>1.2021.10</plantuml.version>
+        <plantuml.version>1.2024.8</plantuml.version>
         <graphvizDot>C:/Program Files (x86)/Graphviz2.38/bin/dot.exe</graphvizDot>
-        <picocli.version>4.6.2</picocli.version>
-        <junit.version>5.8.1</junit.version>
+        <picocli.version>4.7.6</picocli.version>
+        <junit.version>5.11.3</junit.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -36,10 +36,10 @@
         </dependencies>
     </dependencyManagement>
     <dependencies>
-        <!--dependency>
+        <dependency>
             <groupId>net.sourceforge.plantuml</groupId>
             <artifactId>plantuml</artifactId>
-        </dependency-->
+        </dependency>
         <dependency>
             <groupId>info.picocli</groupId>
             <artifactId>picocli</artifactId>
@@ -65,7 +65,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
+                <version>3.13.0</version>
                 <configuration>
                     <annotationProcessorPaths>
                         <path>
@@ -82,7 +82,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.22.2</version>
+                <version>3.5.2</version>
                 <configuration>
                     <trimStackTrace>false</trimStackTrace>
                 </configuration>
@@ -91,7 +91,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.4</version>
+                <version>3.6.0</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
