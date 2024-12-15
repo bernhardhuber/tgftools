@@ -17,10 +17,16 @@ package org.huberb.tgftools.main;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+
 import org.huberb.tgftools.main.TgfPlantumlAdapter.Response;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  *
@@ -28,24 +34,33 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class TgfPlantumlAdapterTest {
 
-    TgfPlantumlAdapter instance = new TgfPlantumlAdapter();
+    TgfPlantumlAdapter instance;
+
+    @BeforeEach
+    void setUp() {
+        instance = new TgfPlantumlAdapter();
+    }
 
     /**
      * Test of process method, of class TgfPlantumlAdapter.
+     *
+     * @throws java.lang.Exception
      */
     @Test
-    public void testProcess() throws Exception {
+    public void testProcess_simple_valid_plantuml() throws Exception {
         String plantuml = "@startuml\n"
                 + "Bob -> Alice\n"
                 + "@enduml\n";
         Response response = instance.process(plantuml);
         String headers = response.getHeaderList().toString();
+        String message = "mismatch " + headers;
         assertAll(
-                () -> assertTrue(headers.contains("HTTP/1.1 200"), "mismatch " + headers),
-                () -> assertTrue(headers.contains("Content-length: 2399"), "mismatch " + headers),
-                () -> assertTrue(headers.contains("X-PlantUML-Diagram-Width: 108"), "mismatch " + headers),
-                () -> assertTrue(headers.contains("X-PlantUML-Diagram-Height: 104"), "mismatch " + headers),
-                () -> assertTrue(headers.contains("-PlantUML-Diagram-Description: (2 participants)"), "mismatch " + headers)
+                () -> assertFalse(response.isError()),
+                () -> assertTrue(headers.contains("status=HTTP/1.1 200"), message),
+                () -> assertTrue(headers.contains("Content-length=2399"), message),
+                () -> assertTrue(headers.contains("X-PlantUML-Diagram-Width=108"), message),
+                () -> assertTrue(headers.contains("X-PlantUML-Diagram-Height=104"), message),
+                () -> assertTrue(headers.contains("-PlantUML-Diagram-Description=(2 participants)"), message)
         );
 
         byte[] pngImageData = response.getContent();
@@ -57,6 +72,35 @@ public class TgfPlantumlAdapterTest {
                     assertEquals("PNG", pngImageDataAsString);
                 },
                 () -> assertEquals(2399, pngImageData.length)
+        );
+    }
+
+    @Test
+    public void testProcess_simple_invalid_plantuml() throws Exception {
+        String plantuml = "@startuml\n"
+                + "Bob Bob -> Alice Alice\n"
+                + "@enduml\n";
+        Response response = instance.process(plantuml);
+        String headers = response.getHeaderList().toString();
+        String message = "mismatch " + headers;
+        assertAll(
+                () -> assertTrue(response.isError()),
+                () -> assertTrue(headers.contains("status=HTTP/1.1 200"), message),
+                () -> assertTrue(headers.contains("Content-length=23190"), message),
+                () -> assertTrue(headers.contains("X-PlantUML-Diagram-Width=591"), message),
+                () -> assertTrue(headers.contains("X-PlantUML-Diagram-Height=324"), message),
+                () -> assertTrue(headers.contains("-PlantUML-Diagram-Description=(Error)"), message)
+        );
+
+        byte[] pngImageData = response.getContent();
+        assertAll(
+                () -> assertNotNull(pngImageData),
+                () -> {
+                    byte[] pngHeader = Arrays.copyOfRange(pngImageData, 1, 4);
+                    String pngImageDataAsString = new String(pngHeader, StandardCharsets.UTF_8);
+                    assertEquals("PNG", pngImageDataAsString);
+                },
+                () -> assertEquals(23190, pngImageData.length)
         );
     }
 

@@ -34,15 +34,15 @@ public class TgfConverters {
     }
 
     /**
-     * Converts {@link TgfModel} to puml node diagram
+     * Converts {@link TgfModel} to puml node diagram.
      */
     public static class PumlNodeConverter implements ITgfConverterToString {
 
-       static final String UML_TGF_NODE_ELEMENT = "node";
-       static final String UML_TGF_CARD_ELEMENT = "card";
-       static final String UML_TGF_ARTIFACT_ELEMENT = "artifact";
+        public static final String UML_TGF_NODE_ELEMENT = "node";
+        public static final String UML_TGF_CARD_ELEMENT = "card";
+        public static final String UML_TGF_ARTIFACT_ELEMENT = "artifact";
 
-        final String umlNodeName ;
+        final String umlNodeName;
 
         String preample = ""
                 + "'left to right direction\n"
@@ -95,7 +95,7 @@ public class TgfConverters {
     }
 
     /**
-     * Converts {@link TgfModel} to puml mindmap diagram
+     * Converts {@link TgfModel} to puml mindmap diagram.
      */
     public static class PumlMindmapConverter extends PumlMindmapWbsConverter {
 
@@ -105,7 +105,7 @@ public class TgfConverters {
     }
 
     /**
-     * Converts {@link TgfModel} to puml wbs diagram
+     * Converts {@link TgfModel} to puml wbs diagram.
      */
     public static class PumlWbsConverter extends PumlMindmapWbsConverter {
 
@@ -116,7 +116,7 @@ public class TgfConverters {
     }
 
     /**
-     * Converts {@link TgfModel} to puml mindmap or wbs diagram
+     * Converts {@link TgfModel} to puml mindmap or wbs diagram.
      */
     abstract static class PumlMindmapWbsConverter implements ITgfConverterToString {
 
@@ -176,7 +176,7 @@ public class TgfConverters {
     }
 
     /**
-     * Converts {@link TgfModel} to csv
+     * Converts {@link TgfModel} to csv.
      */
     public static class CsvConverter implements ITgfConverterToString {
 
@@ -207,7 +207,7 @@ public class TgfConverters {
     }
 
     /**
-     * Converts {@link TgfModel} to json
+     * Converts {@link TgfModel} to json.
      */
     public static class JsonConverter implements ITgfConverterToString {
 
@@ -260,12 +260,12 @@ public class TgfConverters {
     }
 
     /**
-     * Converts {@link TgfModel} to yaml
+     * Converts {@link TgfModel} to yaml.
      */
     public static class YamlConverter implements ITgfConverterToString {
 
         /**
-         * Convert {@link TgfModel} to json.
+         * Convert {@link TgfModel} to yaml.
          *
          * @param tgfModel
          * @return

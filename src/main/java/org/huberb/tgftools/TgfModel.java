@@ -76,10 +76,7 @@ public class TgfModel implements Serializable {
         if (!Objects.equals(this.tgfNodeList, other.tgfNodeList)) {
             return false;
         }
-        if (!Objects.equals(this.tgfEdgeList, other.tgfEdgeList)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.tgfEdgeList, other.tgfEdgeList);
     }
 
     /**
@@ -133,10 +130,7 @@ public class TgfModel implements Serializable {
             if (!Objects.equals(this.id, other.id)) {
                 return false;
             }
-            if (!Objects.equals(this.name, other.name)) {
-                return false;
-            }
-            return true;
+            return Objects.equals(this.name, other.name);
         }
     }
 
@@ -201,10 +195,7 @@ public class TgfModel implements Serializable {
             if (!Objects.equals(this.to, other.to)) {
                 return false;
             }
-            if (!Objects.equals(this.label, other.label)) {
-                return false;
-            }
-            return true;
+            return Objects.equals(this.label, other.label);
         }
     }
 

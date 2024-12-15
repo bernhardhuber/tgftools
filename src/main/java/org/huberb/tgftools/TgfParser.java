@@ -24,6 +24,7 @@ import org.huberb.tgftools.TgfModel.TgfEdge;
 import org.huberb.tgftools.TgfModel.TgfNode;
 
 /**
+ * TGF-Syntax.
  *
  * <pre><code>
  * file := node_list

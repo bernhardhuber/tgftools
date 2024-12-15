@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.Callable;
+import org.huberb.tgftools.TgfConverters;
 import org.huberb.tgftools.TgfConverters.CsvConverter;
 import org.huberb.tgftools.TgfConverters.DatalogPropertySchemaConverter;
 import org.huberb.tgftools.TgfConverters.DatalogValueSchemaConverter;
@@ -71,9 +72,14 @@ public class TgfMain implements Callable<Integer> {
     @Option(names = {"-o", "--output"},
             description = "write to file, if not specified write to stdout")
     private File outputFile;
+
     @Option(names = {"--overwrite-outputfile"},
             description = "overwrite existing output file")
     private boolean overwriteOutputfile;
+
+    @Option(names = {"--puml-node-name"},
+            description = "puml node name like node, card, artifact")
+    private String pumlNodeName = TgfConverters.PumlNodeConverter.UML_TGF_NODE_ELEMENT;
 
     @Mixin
     private TgfConvertToOptions tgfConvertToOptions;
@@ -118,7 +124,7 @@ public class TgfMain implements Callable<Integer> {
         if (convertToFormatList.isEmpty()) {
             final String str = String.format("No conversion option was specified.%n"
                     + "Use one of the conversion-options \"--convert-*\"");
-            SystemErrPrintln(str);
+            systemErrPrintln(str);
             return;
         }
         //---
@@ -132,12 +138,13 @@ public class TgfMain implements Callable<Integer> {
                 final String str = Ansi.AUTO.string(
                         String.format("Output file %s already exists, don't overwrite it.", aOutputFile.toString())
                 );
-                SystemErrPrintln(str);
+                systemErrPrintln(str);
                 continue;
             }
             final String conversionResult;
             if (convertToFormat == ConvertToFormat.puml) {
-                conversionResult = new PumlNodeConverter().convert(tgfModel);
+                String nodeName = this.pumlNodeName;
+                conversionResult = new PumlNodeConverter(nodeName).convert(tgfModel);
             } else if (convertToFormat == ConvertToFormat.pumlMindmap) {
                 conversionResult = new PumlMindmapConverter().convert(tgfModel);
             } else if (convertToFormat == ConvertToFormat.pumlWbs) {
@@ -156,16 +163,16 @@ public class TgfMain implements Callable<Integer> {
                 conversionResult = null;
             }
             if (conversionResult != null) {
-                SystemErrPrintln(String.format(">>> file: %s, format: %s",
+                systemErrPrintln(String.format(">>> file: %s, format: %s",
                         evaluteWriteToFilenameOrStdin(),
                         convertToFormat));
                 if (!aOutputFile.isPresent()) {
-                    SystemOutPrintln(conversionResult);
+                    systemOutPrintln(conversionResult);
                 } else {
                     try (final FileOutputStream fos = new FileOutputStream(aOutputFile.get()); final OutputStreamWriter writer = new OutputStreamWriter(fos, StandardCharsets.UTF_8)) {
                         writer.write(conversionResult);
                     } catch (IOException ioex) {
-                        SystemErrPrintln(String.format("Cannot write to file: %s:%n %s",
+                        systemErrPrintln(String.format("Cannot write to file: %s:%n %s",
                                 aOutputFile.get(),
                                 ioex.getMessage()
                         ));
@@ -212,7 +219,7 @@ public class TgfMain implements Callable<Integer> {
      *
      * @param str
      */
-    private void SystemErrPrintln(String str) {
+    private void systemErrPrintln(String str) {
         final PrintWriter pw = spec.commandLine().getErr();
         pw.println(str);
     }
@@ -222,7 +229,7 @@ public class TgfMain implements Callable<Integer> {
      *
      * @param conversionResult
      */
-    private void SystemOutPrintln(String conversionResult) {
+    private void systemOutPrintln(String conversionResult) {
         final PrintWriter pw = spec.commandLine().getOut();
         pw.println(conversionResult);
     }

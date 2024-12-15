@@ -1,0 +1,26 @@
+nm01 TgfConvertToOptions.java
+nm02 TgfMain.java
+nm03 TgfPlantumlAdapter.java
+nm10 TgfConverters.java
+nm11 TgfModel.java
+nm12 TgfParser.java
+
+tm01 TgfConvertToOptionsTest.java
+tm02 TgfMainTest.java
+tm03 TgfPlantumlAdapterTest.java
+tm10 TgfConvertersTest.java
+tm11 TgfModelTest.java
+tm12 TgfModelToLevelMappingTest.java
+tm13 TgfParserResourcesTest.java
+tm14 TgfParserTest.java
+
+#
+
+nm01 tm01  test
+nm02 tm02  test
+nm03 tm03  test
+nm10 tm10  test
+nm11 tm11  test
+nm11 tm12  test
+nm12 tm13  test
+nm12 tm14  test
