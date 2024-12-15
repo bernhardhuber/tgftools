@@ -38,7 +38,30 @@ public class TgfConverters {
      */
     public static class PumlNodeConverter implements ITgfConverterToString {
 
-        final String umlTgfNodeElement = "node";
+       static final String UML_TGF_NODE_ELEMENT = "node";
+       static final String UML_TGF_CARD_ELEMENT = "card";
+       static final String UML_TGF_ARTIFACT_ELEMENT = "artifact";
+
+        final String umlNodeName ;
+
+        String preample = ""
+                + "'left to right direction\n"
+                + "'top to bottom direction\n"
+                + "\n"
+                + "'skinparam nodesep 50\n"
+                + "'skinparam ranksep 50\n"
+                + "\n"
+                + "'skinparam linetype polyline\n"
+                + "'skinparam linetype ortho\n"
+                + "";
+
+        public PumlNodeConverter() {
+            this(UML_TGF_NODE_ELEMENT);
+        }
+
+        public PumlNodeConverter(String umlNodeName) {
+            this.umlNodeName = umlNodeName;
+        }
 
         /**
          * Convert {@link TgfModel} to plant uml.
@@ -46,13 +69,16 @@ public class TgfConverters {
          * @param tgfModel
          * @return
          */
+        @Override
         public String convert(TgfModel tgfModel) {
             final StringBuilder sb = new StringBuilder();
-            sb.append(String.format("@startuml%n%n"));
+            sb.append(String.format("@startuml%n"))
+                    .append(String.format("%n%s%n", preample));
+
             // nodes
             sb.append(String.format("' nodes%n"));
             tgfModel.tgfNodeList.values().forEach(tgfNode
-                    -> sb.append(String.format("%s \"%s\" as %s%n", umlTgfNodeElement, tgfNode.name, tgfNode.id))
+                    -> sb.append(String.format("%s \"%s\" as %s%n", umlNodeName, tgfNode.name, tgfNode.id))
             );
             // edges
             sb.append(String.format("' edges%n"));
