@@ -8,15 +8,21 @@ A simple command line tool reading and converting TGF data to
 * CSV
 * JSON
 * YAML
+* DATALOG
 
 Following command line options are available
 
 ```
-Usage: tgfMain [-hV] [--convert-csv] [--convert-json] [--convert-puml]
+Usage: tgfMain [-hV] [--convert-csv] [--convert-datalog-property]
+               [--convert-datalog-value] [--convert-json] [--convert-puml]
                [--convert-puml-mindmap] [--convert-puml-wbs] [--convert-yaml]
                [--overwrite-outputfile] [-f=<tgfFile>] [-o=<outputFile>]
 parse, and convert TGF file format
       --convert-csv        convert TGF to csv
+      --convert-datalog-property
+                           convert TGF to datalog property schema
+      --convert-datalog-value
+                           convert TGF to datalog value schema
       --convert-json       convert TGF to json
       --convert-puml       convert TGF to puml
       --convert-puml-mindmap

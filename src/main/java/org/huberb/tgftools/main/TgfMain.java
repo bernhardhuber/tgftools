@@ -32,6 +32,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.Callable;
 import org.huberb.tgftools.TgfConverters.CsvConverter;
+import org.huberb.tgftools.TgfConverters.DatalogPropertySchemaConverter;
+import org.huberb.tgftools.TgfConverters.DatalogValueSchemaConverter;
 import org.huberb.tgftools.TgfConverters.JsonConverter;
 import org.huberb.tgftools.TgfConverters.PumlMindmapConverter;
 import org.huberb.tgftools.TgfConverters.PumlNodeConverter;
@@ -146,6 +148,10 @@ public class TgfMain implements Callable<Integer> {
                 conversionResult = new JsonConverter().convert(tgfModel);
             } else if (convertToFormat == ConvertToFormat.yaml) {
                 conversionResult = new YamlConverter().convert(tgfModel);
+            } else if (convertToFormat == ConvertToFormat.datalogValue) {
+                conversionResult = new DatalogValueSchemaConverter().convert(tgfModel);
+            } else if (convertToFormat == ConvertToFormat.datalogProperty) {
+                conversionResult = new DatalogPropertySchemaConverter().convert(tgfModel);
             } else {
                 conversionResult = null;
             }
@@ -156,8 +162,7 @@ public class TgfMain implements Callable<Integer> {
                 if (!outputFile.isPresent()) {
                     System_out_println(conversionResult);
                 } else {
-                    try (final FileOutputStream fos = new FileOutputStream(outputFile.get());
-                            final OutputStreamWriter writer = new OutputStreamWriter(fos, StandardCharsets.UTF_8)) {
+                    try (final FileOutputStream fos = new FileOutputStream(outputFile.get()); final OutputStreamWriter writer = new OutputStreamWriter(fos, StandardCharsets.UTF_8)) {
                         writer.write(conversionResult);
                     } catch (IOException ioex) {
                         System_err_println(String.format("Cannot write to file: %s:%n %s",
@@ -216,7 +221,7 @@ public class TgfMain implements Callable<Integer> {
     /**
      * Use picocli error print writer for printing to stdout.
      *
-     * @param str
+     * @param conversionResult
      */
     private void System_out_println(String conversionResult) {
         final PrintWriter pw = spec.commandLine().getOut();

@@ -64,6 +64,9 @@ public class TgfParser {
      * Current parsing state.
      */
     private ParsingTgfStatus parsingTgfStatus = ParsingTgfStatus.start;
+    /**
+     * Tokens for line comments.
+     */
     final List<String> commentsList = Arrays.asList("--", "'");
 
     /**
@@ -146,8 +149,7 @@ public class TgfParser {
     /**
      * Tokenize a single input line.
      *
-     * @param parsingTgfStatus current parsing state, usually
-     * {@link ParsingTgfStatus.node}, or {@link ParsingTgfStatus.edge}
+     * @param parsingTgfStatus current parsing state
      * @param line tokenize this line
      * @return {@link TgfTokenValue} of a line
      */
@@ -180,12 +182,12 @@ public class TgfParser {
                 break;
                 case parsingEdges: // fromNodeId toNodeId [label]
                 {
-                    final String[] splitted = trimmedLine.split(" +", 3);
-                    final String fromNodeId = splitted[0].trim();
-                    final String toNodeId = splitted[1].trim();
+                    final String[] split = trimmedLine.split(" +", 3);
+                    final String fromNodeId = split[0].trim();
+                    final String toNodeId = split[1].trim();
                     final String edgeLabel;
-                    if (splitted.length > 2) {
-                        edgeLabel = splitted[2].trim();
+                    if (split.length > 2) {
+                        edgeLabel = split[2].trim();
                     } else {
                         edgeLabel = "";
                     }

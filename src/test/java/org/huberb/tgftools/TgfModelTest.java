@@ -24,9 +24,9 @@ public class TgfModelTest {
      */
     @Test
     public void testAddNode() {
-        final TgfNode tgfNode = new TgfNode("id1", "name1");
-        final TgfModel instance = new TgfModel();
-        instance.addNode(tgfNode);
+        final TgfModel instance = new TgfModel.Builder()
+                .node(new TgfNode("id1", "name1"))
+                .build();
 
         assertEquals(0, instance.tgfEdgeList.size());
         assertEquals(1, instance.tgfNodeList.size());
@@ -37,9 +37,10 @@ public class TgfModelTest {
      */
     @Test
     public void testAddEdge() {
-        final TgfEdge tgfEdge = new TgfEdge("from1", "to1", "label1");
-        final TgfModel instance = new TgfModel();
-        instance.addEdge(tgfEdge);
+        final TgfModel instance = new TgfModel.Builder()
+                .edge(new TgfEdge("from1", "to1", "label1"))
+                .build();
+
         assertEquals(1, instance.tgfEdgeList.size());
         assertEquals(0, instance.tgfNodeList.size());
     }
@@ -91,11 +92,10 @@ public class TgfModelTest {
     }
 
     TgfModel createSimpleTgfModel1() {
-        final TgfNode tgfNode = new TgfNode("id1", "name1");
-        final TgfEdge tgfEdge = new TgfEdge("from1", "to1", "label1");
-        final TgfModel instance = new TgfModel();
-        instance.addNode(tgfNode);
-        instance.addEdge(tgfEdge);
+        TgfModel instance = new TgfModel.Builder()
+                .node(new TgfNode("id1", "name1"))
+                .edge(new TgfEdge("from1", "to1", "label1"))
+                .build();
         return instance;
     }
 }

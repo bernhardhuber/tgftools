@@ -10,6 +10,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -29,6 +30,14 @@ public class TgfMainTest {
     CommandLine cmd;
     StringWriter swOut;
     StringWriter swErr;
+
+    static Function<String, File> createFileFrom = s -> {
+        final File infile = new File("./src/test/resources/", s);
+        String m = "" + infile;
+        assertTrue(infile.exists(), m);
+        assertTrue(infile.canRead(), m);
+        return infile;
+    };
 
     @BeforeEach
     public void setUp() {
@@ -52,7 +61,6 @@ public class TgfMainTest {
         assertEquals("", swErr.toString(), "stderr");
         final String swOutAsString = swOut.toString();
         final String m = String.format("stdout helpOption %s, stdout: %s", helpOption, swOutAsString);
-        assertNotEquals(0, swOutAsString, m);
         assertTrue(swOutAsString.contains("Usage:"), m);
         assertTrue(swOutAsString.contains("--convert-"), m);
         assertTrue(swOutAsString.contains("-h"), m);
@@ -63,7 +71,7 @@ public class TgfMainTest {
 
     @Test
     public void testCommandLine_convert_csv() {
-        final File tgfInputFile = new File("./src/test/resources/", "tgftools-dependency-tree.tgf");
+        final File tgfInputFile = createFileFrom.apply("tgftools-dependency-tree.tgf");
         final List<String> commandline = Arrays.asList(
                 "--convert-csv",
                 String.format("--file=%s", tgfInputFile.getAbsolutePath())
@@ -79,7 +87,6 @@ public class TgfMainTest {
         {
             final String swOutAsString = swOut.toString();
             final String m = String.format("commandline %s, stdout: %s", commandline, swOutAsString);
-            assertNotEquals(0, swOutAsString, m);
             assertTrue(swOutAsString.contains("\"type\","
                     + "\"id_from\","
                     + "\"name_to\","
@@ -95,7 +102,7 @@ public class TgfMainTest {
 
     @Test
     public void testCommandLine_convert_json() {
-        final File tgfInputFile = new File("./src/test/resources/", "tgftools-dependency-tree.tgf");
+        final File tgfInputFile = createFileFrom.apply("tgftools-dependency-tree.tgf");
         final List<String> commandline = Arrays.asList(
                 "--convert-json",
                 String.format("--file=%s", tgfInputFile.getAbsolutePath())
@@ -111,7 +118,6 @@ public class TgfMainTest {
         {
             final String swOutAsString = swOut.toString();
             final String m = String.format("commandline %s, stdout: %s", commandline, swOutAsString);
-            assertNotEquals(0, swOutAsString, m);
             assertTrue(swOutAsString.contains("\"nodes\""), m);
             assertTrue(swOutAsString.contains("\"edges\""), m);
             assertTrue(swOutAsString.contains("node"), m);
@@ -125,7 +131,7 @@ public class TgfMainTest {
 
     @Test
     public void testCommandLine_convert_yaml() {
-        final File tgfInputFile = new File("./src/test/resources/", "tgftools-dependency-tree.tgf");
+        final File tgfInputFile = createFileFrom.apply("tgftools-dependency-tree.tgf");
         final List<String> commandline = Arrays.asList(
                 "--convert-yaml",
                 String.format("--file=%s", tgfInputFile.getAbsolutePath())
@@ -141,7 +147,6 @@ public class TgfMainTest {
         {
             final String swOutAsString = swOut.toString();
             final String m = String.format("commandline %s, stderr: %s", commandline, swOutAsString);
-            assertNotEquals(0, swOutAsString, m);
             assertTrue(swOutAsString.contains("nodes:"), m);
             assertTrue(swOutAsString.contains("edges:"), m);
             assertTrue(swOutAsString.contains("\"compile\""), m);
@@ -151,7 +156,7 @@ public class TgfMainTest {
 
     @Test
     public void testCommandLine_convert_puml() {
-        final File tgfInputFile = new File("./src/test/resources/", "tgftools-dependency-tree.tgf");
+        final File tgfInputFile = createFileFrom.apply("tgftools-dependency-tree.tgf");
         final List<String> commandline = Arrays.asList(
                 "--convert-puml",
                 String.format("--file=%s", tgfInputFile.getAbsolutePath())
@@ -167,7 +172,6 @@ public class TgfMainTest {
         {
             final String swOutAsString = swOut.toString();
             final String m = String.format("commandline %s, stderr: %s", commandline, swOutAsString);
-            assertNotEquals(0, swOutAsString, m);
             assertTrue(swOutAsString.contains("@startuml"), m);
             assertTrue(swOutAsString.contains("@enduml"), m);
             assertTrue(swOutAsString.contains("nodes"), m);
@@ -181,7 +185,7 @@ public class TgfMainTest {
 
     @Test
     public void testCommandLine_convert_puml_mindmap() {
-        final File tgfInputFile = new File("./src/test/resources/", "tgftools-dependency-tree.tgf");
+        final File tgfInputFile = createFileFrom.apply("tgftools-dependency-tree.tgf");
         final List<String> commandline = Arrays.asList(
                 "--convert-puml-mindmap",
                 String.format("--file=%s", tgfInputFile.getAbsolutePath())
@@ -197,7 +201,6 @@ public class TgfMainTest {
         {
             final String swOutAsString = swOut.toString();
             final String m = String.format("commandline %s, stderr: %s", commandline, swOutAsString);
-            assertNotEquals(0, swOutAsString, m);
             assertTrue(swOutAsString.contains("@startmindmap"), m);
             assertTrue(swOutAsString.contains("@endmindmap"), m);
             assertTrue(swOutAsString.contains("* root"), m);
@@ -210,7 +213,7 @@ public class TgfMainTest {
 
     @Test
     public void testCommandLine_convert_puml_wbs() {
-        final File tgfInputFile = new File("./src/test/resources/", "tgftools-dependency-tree.tgf");
+        final File tgfInputFile = createFileFrom.apply("tgftools-dependency-tree.tgf");
         final List<String> commandline = Arrays.asList(
                 "--convert-puml-wbs",
                 String.format("--file=%s", tgfInputFile.getAbsolutePath())
@@ -226,7 +229,6 @@ public class TgfMainTest {
         {
             final String swOutAsString = swOut.toString();
             final String m = String.format("commandline %s, stderr: %s", commandline, swOutAsString);
-            assertNotEquals(0, swOutAsString, m);
             assertTrue(swOutAsString.contains("@startwbs"), m);
             assertTrue(swOutAsString.contains("@endwbs"), m);
             assertTrue(swOutAsString.contains("* root"), m);

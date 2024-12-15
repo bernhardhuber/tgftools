@@ -36,26 +36,37 @@ public class TgfConvertToOptions {
     @Option(names = {"--convert-yaml"},
             description = "convert TGF to yaml")
     private boolean convertToYaml;
+    @Option(names = {"--convert-datalog-value"},
+            description = "convert TGF to datalog value schema")
+    private boolean convertToDatalogValue;
+    @Option(names = {"--convert-datalog-property"},
+            description = "convert TGF to datalog property schema")
+    private boolean convertToDatalogProperty;
 
     //---
     public TgfConvertToOptions() {
         this(false, false, false,
                 false,
                 false,
-                false);
+                false,
+                false, false);
     }
 
     public TgfConvertToOptions(
             boolean convertToPuml, boolean convertToPumlMindmap, boolean convertToPumlWbs,
             boolean convertToCsv,
             boolean convertToJson,
-            boolean convertToYaml) {
+            boolean convertToYaml,
+            boolean convertToDatalogValue,
+            boolean convertToDatalogProperty) {
         this.convertToPuml = convertToPuml;
         this.convertToPumlMindmap = convertToPumlMindmap;
         this.convertToPumlWbs = convertToPumlWbs;
         this.convertToCsv = convertToCsv;
         this.convertToJson = convertToJson;
         this.convertToYaml = convertToYaml;
+        this.convertToDatalogValue = convertToDatalogValue;
+        this.convertToDatalogProperty = convertToDatalogProperty;
     }
 
     //---
@@ -104,6 +115,18 @@ public class TgfConvertToOptions {
             String getExtension() {
                 return ".yaml";
             }
+        },
+        datalogValue {
+            @Override
+            String getExtension() {
+                return ".dl";
+            }
+        },
+        datalogProperty {
+            @Override
+            String getExtension() {
+                return ".dl";
+            }
         };
 
         abstract String getExtension();
@@ -133,6 +156,8 @@ public class TgfConvertToOptions {
         result.put(ConvertToFormat.csv, this.convertToCsv);
         result.put(ConvertToFormat.json, this.convertToJson);
         result.put(ConvertToFormat.yaml, this.convertToYaml);
+        result.put(ConvertToFormat.datalogValue, this.convertToDatalogValue);
+        result.put(ConvertToFormat.datalogProperty, this.convertToDatalogProperty);
         return result;
     }
 }

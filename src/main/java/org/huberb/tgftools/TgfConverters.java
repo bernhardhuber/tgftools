@@ -28,7 +28,7 @@ import org.huberb.tgftools.TgfModel.TgfNode;
  */
 public class TgfConverters {
 
-    public static interface ITgfConverterToString {
+    public interface ITgfConverterToString {
 
         String convert(TgfModel tgfModel);
     }
@@ -277,13 +277,11 @@ public class TgfConverters {
     }
 
     static boolean stringIsEmpty(String s) {
-        boolean result = s == null || (s != null && s.isEmpty());
-        return result;
+        return s == null || (s != null && s.isEmpty());
     }
 
     static boolean stringIsBlank(String s) {
-        boolean result = s == null || (s != null && s.trim().isEmpty());
-        return result;
+        return s == null || (s != null && s.trim().isEmpty());
     }
 
     static class TgfModelToLevelMapping {
@@ -315,6 +313,88 @@ public class TgfConverters {
                 }
             }
             return tgfNodeLevelMap;
+        }
+    }
+
+    /**
+     * Converts {@link TgfModel} to datalog format.
+     */
+    public static class DatalogValueSchemaConverter implements ITgfConverterToString {
+
+        final String predicateNode = "node";
+        final String predicateEdge = "edge";
+        final String predicateEdgeLabel = "edgeLabel";
+
+        /**
+         * Convert {@link TgfModel} to plant datalog property value.
+         *
+         * @param tgfModel
+         * @return
+         */
+        public String convert(TgfModel tgfModel) {
+            final StringBuilder sb = new StringBuilder();
+            sb.append(String.format("%% start%n%n"));
+            // nodes
+            sb.append(String.format("%% nodes%n"));
+            tgfModel.tgfNodeList.values().forEach(tgfNode -> {
+                sb.append(String.format("%s(\"%s\",\"%s\").%n", predicateNode, tgfNode.id, tgfNode.name));
+            });
+            // edges
+            sb.append(String.format("%% edges%n"));
+            tgfModel.tgfEdgeList.forEach(tgfEdge -> {
+                if (stringIsBlank(tgfEdge.label)) {
+                    sb.append(String.format("%s(\"%s\", \"%s\").%n", predicateEdge, tgfEdge.from, tgfEdge.to));
+                } else {
+                     sb.append(String.format("%s(\"%s\", \"%s\").%n", predicateEdge, tgfEdge.from, tgfEdge.to));
+                    sb.append(String.format("%s(\"%s\", \"%s\", \"%s\").%n", predicateEdgeLabel, tgfEdge.from, tgfEdge.to, tgfEdge.label));
+                }
+            });
+             sb.append(String.format("%n%% end%n"));
+            return sb.toString();
+        }
+    }
+
+    /**
+     * Converts {@link TgfModel} to datalog format.
+     */
+    public static class DatalogPropertySchemaConverter implements ITgfConverterToString {
+
+        final String predicateData = "tgfdata";
+
+        /**
+         * Convert {@link TgfModel} to plant datalog property value.
+         *
+         * @param tgfModel
+         * @return
+         */
+        public String convert(TgfModel tgfModel) {
+            final StringBuilder sb = new StringBuilder();
+            sb.append(String.format("%% start%n%n"));
+            // nodes
+            sb.append(String.format("%% nodes%n"));
+            tgfModel.tgfNodeList.values().forEach(tgfNode -> {
+                sb.append(String.format("%s(\"%s\", instanceof, \"%s\").%n", predicateData, tgfNode.id, "node"));
+                sb.append(String.format("%s(\"%s\", name, \"%s\").%n", predicateData, tgfNode.id, tgfNode.name));
+
+            });
+            // edges
+            sb.append(String.format("%% edges%n"));
+            tgfModel.tgfEdgeList.forEach(tgfEdge -> {
+                sb.append(String.format("%s(\"%s\", edge, \"%s\").%n", predicateData, tgfEdge.from, tgfEdge.to));
+                String edgeId = tgfEdge.from + "-" + tgfEdge.to;
+                if (stringIsBlank(tgfEdge.label)) {
+                    sb.append(String.format("%s(\"%s\", instanceof, \"%s\").%n", predicateData, edgeId, "edge"));
+                    sb.append(String.format("%s(\"%s\", from, \"%s\").%n", predicateData, edgeId, tgfEdge.from));
+                    sb.append(String.format("%s(\"%s\", to, \"%s\").%n", predicateData, edgeId, tgfEdge.to));
+                } else {
+                    sb.append(String.format("%s(\"%s\", instanceof, \"%s\").%n", predicateData, edgeId, "edge"));
+                    sb.append(String.format("%s(\"%s\", from, \"%s\").%n", predicateData, edgeId, tgfEdge.from));
+                    sb.append(String.format("%s(\"%s\", to, \"%s\").%n", predicateData, edgeId, tgfEdge.to));
+                    sb.append(String.format("%s(\"%s\", label, \"%s\").%n", predicateData, edgeId, tgfEdge.label));
+                }
+            });
+            sb.append(String.format("%n%% end%n"));
+            return sb.toString();
         }
     }
 }
