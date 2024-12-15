@@ -118,7 +118,7 @@ public class TgfMain implements Callable<Integer> {
         if (convertToFormatList.isEmpty()) {
             final String str = String.format("No conversion option was specified.%n"
                     + "Use one of the conversion-options \"--convert-*\"");
-            System_err_println(str);
+            SystemErrPrintln(str);
             return;
         }
         //---
@@ -127,12 +127,12 @@ public class TgfMain implements Callable<Integer> {
         //---
         for (ConvertToFormat convertToFormat : convertToFormatList) {
 
-            final Optional<File> outputFile = outputFileList.get(convertToFormat);
-            if (!this.overwriteOutputfile && outputFile.isPresent() && outputFile.get().exists()) {
+            final Optional<File> aOutputFile = outputFileList.get(convertToFormat);
+            if (!this.overwriteOutputfile && aOutputFile.isPresent() && aOutputFile.get().exists()) {
                 final String str = Ansi.AUTO.string(
-                        String.format("Output file %s already exists, don't overwrite it.", outputFile.toString())
+                        String.format("Output file %s already exists, don't overwrite it.", aOutputFile.toString())
                 );
-                System_err_println(str);
+                SystemErrPrintln(str);
                 continue;
             }
             final String conversionResult;
@@ -156,17 +156,17 @@ public class TgfMain implements Callable<Integer> {
                 conversionResult = null;
             }
             if (conversionResult != null) {
-                System_err_println(String.format(">>> file: %s, format: %s",
+                SystemErrPrintln(String.format(">>> file: %s, format: %s",
                         evaluteWriteToFilenameOrStdin(),
                         convertToFormat));
-                if (!outputFile.isPresent()) {
-                    System_out_println(conversionResult);
+                if (!aOutputFile.isPresent()) {
+                    SystemOutPrintln(conversionResult);
                 } else {
-                    try (final FileOutputStream fos = new FileOutputStream(outputFile.get()); final OutputStreamWriter writer = new OutputStreamWriter(fos, StandardCharsets.UTF_8)) {
+                    try (final FileOutputStream fos = new FileOutputStream(aOutputFile.get()); final OutputStreamWriter writer = new OutputStreamWriter(fos, StandardCharsets.UTF_8)) {
                         writer.write(conversionResult);
                     } catch (IOException ioex) {
-                        System_err_println(String.format("Cannot write to file: %s:%n %s",
-                                outputFile.get(),
+                        SystemErrPrintln(String.format("Cannot write to file: %s:%n %s",
+                                aOutputFile.get(),
                                 ioex.getMessage()
                         ));
                     }
@@ -176,10 +176,9 @@ public class TgfMain implements Callable<Integer> {
     }
 
     String evaluteWriteToFilenameOrStdin() {
-        final String result = Optional.ofNullable(this.tgfFile)
-                .map((f) -> f.toString())
+        return Optional.ofNullable(this.tgfFile)
+                .map(f -> f.toString())
                 .orElse("stdin");
-        return result;
     }
 
     /**
@@ -213,7 +212,7 @@ public class TgfMain implements Callable<Integer> {
      *
      * @param str
      */
-    private void System_err_println(String str) {
+    private void SystemErrPrintln(String str) {
         final PrintWriter pw = spec.commandLine().getErr();
         pw.println(str);
     }
@@ -223,7 +222,7 @@ public class TgfMain implements Callable<Integer> {
      *
      * @param conversionResult
      */
-    private void System_out_println(String conversionResult) {
+    private void SystemOutPrintln(String conversionResult) {
         final PrintWriter pw = spec.commandLine().getOut();
         pw.println(conversionResult);
     }

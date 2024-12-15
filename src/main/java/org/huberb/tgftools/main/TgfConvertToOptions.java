@@ -77,69 +77,75 @@ public class TgfConvertToOptions {
         noformat {
             @Override
             String getExtension() {
-                return "";
+                return NO_EXTENSION;
             }
         },
         puml {
             @Override
             String getExtension() {
-                return ".puml";
+                return PUML_EXTENSION;
             }
         },
         pumlMindmap {
             @Override
             String getExtension() {
-                return ".puml";
+                return PUML_EXTENSION;
             }
         },
         pumlWbs {
             @Override
             String getExtension() {
-                return ".puml";
+                return PUML_EXTENSION;
             }
+
         },
         csv {
             @Override
             String getExtension() {
-                return ".csv";
+                return CSV_EXTENSION;
             }
         },
         json {
             @Override
             String getExtension() {
-                return ".json";
+                return JSON_EXTENSION;
             }
         },
         yaml {
             @Override
             String getExtension() {
-                return ".yaml";
+                return YAML_EXTENSION;
             }
         },
         datalogValue {
             @Override
             String getExtension() {
-                return ".dl";
+                return DL_EXTENSION;
             }
         },
         datalogProperty {
             @Override
             String getExtension() {
-                return ".dl";
+                return DL_EXTENSION;
             }
         };
+        private static final String NO_EXTENSION = "";
+        private static final String PUML_EXTENSION = ".puml";
+        private static final String CSV_EXTENSION = ".csv";
+        private static final String JSON_EXTENSION = ".json";
+        private static final String YAML_EXTENSION = ".yaml";
+        private static final String DL_EXTENSION = ".dl";
 
         abstract String getExtension();
     }
 
-    public List<ConvertToFormat> createConvertToFormatList() {
+    List<ConvertToFormat> createConvertToFormatList() {
         final Map<ConvertToFormat, Boolean> convertToFormatBooleanMap = createConvertToFormatMap();
         // filter where map.entry is true
-        final List<ConvertToFormat> convertToFormatList = convertToFormatBooleanMap.entrySet().stream()
-                .filter((e) -> e.getValue())
-                .map((e) -> e.getKey())
+        return convertToFormatBooleanMap.entrySet().stream()
+                .filter(e -> e.getValue())
+                .map(e -> e.getKey())
                 .collect(Collectors.toList());
-        return convertToFormatList;
     }
 
     /**

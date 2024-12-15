@@ -19,6 +19,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -31,7 +32,7 @@ import java.util.Objects;
 public class TgfModel implements Serializable {
 
     private static final long serialVersionUID = 20211001L;
-    final LinkedHashMap<String, TgfNode> tgfNodeList;
+    final Map<String, TgfNode> tgfNodeList;
     final List<TgfEdge> tgfEdgeList;
 
     TgfModel() {
