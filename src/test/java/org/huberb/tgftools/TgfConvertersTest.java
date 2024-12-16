@@ -26,8 +26,12 @@ import org.huberb.tgftools.TgfConverters.PumlMindmapConverter;
 import org.huberb.tgftools.TgfConverters.PumlNodeConverter;
 import org.huberb.tgftools.TgfConverters.PumlWbsConverter;
 import org.huberb.tgftools.TgfConverters.YamlConverter;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 /**
  *
@@ -59,8 +63,18 @@ public class TgfConvertersTest {
             final String pumlFromTgf = new PumlNodeConverter().convert(tgfModel);
 
             final String pumlFromTgfNormalized = normalizeF.apply(pumlFromTgf);
-            System_out_println(String.format("puml from tgf%n%s", pumlFromTgf));
+            SystemOutPrintln(String.format("puml from tgf%n%s", pumlFromTgf));
             assertEquals("@startuml"
+                    + ""
+                    + "'left to right direction"
+                    + "'top to bottom direction"
+                    + ""
+                    + "'skinparam nodesep 50"
+                    + "'skinparam ranksep 50"
+                    + ""
+                    + "'skinparam linetype polyline"
+                    + "'skinparam linetype ortho"
+                    + ""
                     + "' nodes"
                     + "node \"A\" as 1"
                     + "node \"B\" as 2"
@@ -78,7 +92,7 @@ public class TgfConvertersTest {
             final String pumlFromTgf = new PumlMindmapConverter().convert(tgfModel);
 
             final String pumlFromTgfNormalized = normalizeF.apply(pumlFromTgf);
-            System_out_println(String.format("puml mindmap from tgf%n%s", pumlFromTgf));
+            SystemOutPrintln(String.format("puml mindmap from tgf%n%s", pumlFromTgf));
             assertEquals("@startmindmap"
                     + "* root"
                     + "** 1 A"
@@ -95,7 +109,7 @@ public class TgfConvertersTest {
             final String pumlFromTgf = new PumlWbsConverter().convert(tgfModel);
 
             final String pumlFromTgfNormalized = normalizeF.apply(pumlFromTgf);
-            System_out_println(String.format("puml wbs from tgf%n%s", pumlFromTgf));
+            SystemOutPrintln(String.format("puml wbs from tgf%n%s", pumlFromTgf));
             assertEquals("@startwbs"
                     + "* root"
                     + "** 1 A"
@@ -113,11 +127,50 @@ public class TgfConvertersTest {
             final String pumlFromTgf = new PumlNodeConverter().convert(tgfModel);
 
             final String pumlFromTgfNormalized = normalizeF.apply(pumlFromTgf);
-            System_out_println(String.format("puml from tgf%n%s", pumlFromTgf));
+            SystemOutPrintln(String.format("puml from tgf%n%s", pumlFromTgf));
             assertEquals("@startuml"
+                    + ""
+                    + "'left to right direction"
+                    + "'top to bottom direction"
+                    + ""
+                    + "'skinparam nodesep 50"
+                    + "'skinparam ranksep 50"
+                    + ""
+                    + "'skinparam linetype polyline"
+                    + "'skinparam linetype ortho"
+                    + ""
                     + "' nodes"
                     + "node \"A\" as 1"
                     + "node \"B\" as 2"
+                    + "' edges"
+                    + "1 --> 2"
+                    + "@enduml", pumlFromTgfNormalized);
+        }
+    }
+    @Test
+    public void testConvertToPumlCard_simple_tgf_no_edge_label() throws IOException {
+
+        try (StringReader rr = new StringReader(tgf2)) {
+            final TgfParser tgfParser = new TgfParser();
+            final TgfModel tgfModel = tgfParser.parse(rr);
+            final String pumlFromTgf = new PumlNodeConverter(PumlNodeConverter.UML_TGF_CARD_ELEMENT).convert(tgfModel);
+
+            final String pumlFromTgfNormalized = normalizeF.apply(pumlFromTgf);
+            SystemOutPrintln(String.format("puml from tgf%n%s", pumlFromTgf));
+            assertEquals("@startuml"
+                    + ""
+                    + "'left to right direction"
+                    + "'top to bottom direction"
+                    + ""
+                    + "'skinparam nodesep 50"
+                    + "'skinparam ranksep 50"
+                    + ""
+                    + "'skinparam linetype polyline"
+                    + "'skinparam linetype ortho"
+                    + ""
+                    + "' nodes"
+                    + "card \"A\" as 1"
+                    + "card \"B\" as 2"
                     + "' edges"
                     + "1 --> 2"
                     + "@enduml", pumlFromTgfNormalized);
@@ -132,7 +185,7 @@ public class TgfConvertersTest {
             final String csvFromTgf = new CsvConverter().convert(tgfModel);
 
             final String csvFromTgfNormalized = normalizeF.apply(csvFromTgf);
-            System_out_println(String.format("csv from tgf%n%s", csvFromTgf));
+            SystemOutPrintln(String.format("csv from tgf%n%s", csvFromTgf));
             assertEquals("\"type\",\"id_from\",\"name_to\",\"label\""
                     + "\"node\",\"1\",\"A\",\"\""
                     + "\"node\",\"2\",\"B\",\"\""
@@ -148,7 +201,7 @@ public class TgfConvertersTest {
             final String jsonFromTgf = new JsonConverter().convert(tgfModel);
 
             final String jsonFromTgfNormalized = normalizeF.apply(jsonFromTgf);
-            System_out_println(String.format("json from tgf%n%s", jsonFromTgf));
+            SystemOutPrintln(String.format("json from tgf%n%s", jsonFromTgf));
             assertEquals("{\"nodes\": ["
                     + "{\"id\":\"1\",\"name\":\"A\"},"
                     + "{\"id\":\"2\",\"name\":\"B\"}"
@@ -168,7 +221,7 @@ public class TgfConvertersTest {
             final String yamlFromTgf = new YamlConverter().convert(tgfModel);
 
             final String yamlFromTgfNormalized = normalizeF.apply(yamlFromTgf);
-            System_out_println(String.format("yaml from tgf%n%s", yamlFromTgf));
+            SystemOutPrintln(String.format("yaml from tgf%n%s", yamlFromTgf));
             assertEquals("## YAML Template."
                     + "---"
                     + "nodes:"
@@ -194,7 +247,7 @@ public class TgfConvertersTest {
             final String datalogFromTgf = new DatalogValueSchemaConverter().convert(tgfModel);
 
             final String datalogFromTgfNormalized = normalizeF.apply(datalogFromTgf);
-            System_out_println(String.format("DatalogValueSchemaConverter from tgf%n%s", datalogFromTgf));
+            SystemOutPrintln(String.format("DatalogValueSchemaConverter from tgf%n%s", datalogFromTgf));
             assertEquals("% start"
                     + "% nodes"
                     + "node(\"1\",\"A\")."
@@ -215,7 +268,7 @@ public class TgfConvertersTest {
             final String datalogFromTgf = new DatalogPropertySchemaConverter().convert(tgfModel);
 
             final String datalogFromTgfNormalized = normalizeF.apply(datalogFromTgf);
-            System_out_println(String.format("DatalogPropertySchema from tgf%n%s", datalogFromTgf));
+            SystemOutPrintln(String.format("DatalogPropertySchema from tgf%n%s", datalogFromTgf));
             assertEquals("% start"
                     + "% nodes"
                     + "tgfdata(\"1\", instanceof, \"node\")."
@@ -233,7 +286,7 @@ public class TgfConvertersTest {
         }
     }
 
-    private void System_out_println(String format) {
+    private void SystemOutPrintln(String format) {
         if (outputSystemOut) {
             System.out.println(format);
         }

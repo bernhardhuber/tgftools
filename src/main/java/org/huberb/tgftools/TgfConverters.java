@@ -34,11 +34,34 @@ public class TgfConverters {
     }
 
     /**
-     * Converts {@link TgfModel} to puml node diagram
+     * Converts {@link TgfModel} to puml node diagram.
      */
     public static class PumlNodeConverter implements ITgfConverterToString {
 
-        final String umlTgfNodeElement = "node";
+        public static final String UML_TGF_NODE_ELEMENT = "node";
+        public static final String UML_TGF_CARD_ELEMENT = "card";
+        public static final String UML_TGF_ARTIFACT_ELEMENT = "artifact";
+
+        final String umlNodeName;
+
+        String preample = ""
+                + "'left to right direction\n"
+                + "'top to bottom direction\n"
+                + "\n"
+                + "'skinparam nodesep 50\n"
+                + "'skinparam ranksep 50\n"
+                + "\n"
+                + "'skinparam linetype polyline\n"
+                + "'skinparam linetype ortho\n"
+                + "";
+
+        public PumlNodeConverter() {
+            this(UML_TGF_NODE_ELEMENT);
+        }
+
+        public PumlNodeConverter(String umlNodeName) {
+            this.umlNodeName = umlNodeName;
+        }
 
         /**
          * Convert {@link TgfModel} to plant uml.
@@ -46,14 +69,17 @@ public class TgfConverters {
          * @param tgfModel
          * @return
          */
+        @Override
         public String convert(TgfModel tgfModel) {
             final StringBuilder sb = new StringBuilder();
-            sb.append(String.format("@startuml%n%n"));
+            sb.append(String.format("@startuml%n"))
+                    .append(String.format("%n%s%n", preample));
+
             // nodes
             sb.append(String.format("' nodes%n"));
-            tgfModel.tgfNodeList.values().forEach(tgfNode -> {
-                sb.append(String.format("%s \"%s\" as %s%n", umlTgfNodeElement, tgfNode.name, tgfNode.id));
-            });
+            tgfModel.tgfNodeList.values().forEach(tgfNode
+                    -> sb.append(String.format("%s \"%s\" as %s%n", umlNodeName, tgfNode.name, tgfNode.id))
+            );
             // edges
             sb.append(String.format("' edges%n"));
             tgfModel.tgfEdgeList.forEach(tgfEdge -> {
@@ -69,7 +95,7 @@ public class TgfConverters {
     }
 
     /**
-     * Converts {@link TgfModel} to puml mindmap diagram
+     * Converts {@link TgfModel} to puml mindmap diagram.
      */
     public static class PumlMindmapConverter extends PumlMindmapWbsConverter {
 
@@ -79,7 +105,7 @@ public class TgfConverters {
     }
 
     /**
-     * Converts {@link TgfModel} to puml wbs diagram
+     * Converts {@link TgfModel} to puml wbs diagram.
      */
     public static class PumlWbsConverter extends PumlMindmapWbsConverter {
 
@@ -90,14 +116,14 @@ public class TgfConverters {
     }
 
     /**
-     * Converts {@link TgfModel} to puml mindmap or wbs diagram
+     * Converts {@link TgfModel} to puml mindmap or wbs diagram.
      */
     abstract static class PumlMindmapWbsConverter implements ITgfConverterToString {
 
         private final String startElement;
         private final String endElement;
 
-        public PumlMindmapWbsConverter(String startElement, String endElement) {
+        PumlMindmapWbsConverter(String startElement, String endElement) {
             this.startElement = startElement;
             this.endElement = endElement;
         }
@@ -150,7 +176,7 @@ public class TgfConverters {
     }
 
     /**
-     * Converts {@link TgfModel} to csv
+     * Converts {@link TgfModel} to csv.
      */
     public static class CsvConverter implements ITgfConverterToString {
 
@@ -160,29 +186,28 @@ public class TgfConverters {
          * @param tgfModel
          * @return
          */
+        @Override
         public String convert(TgfModel tgfModel) {
             final StringBuilder sb = new StringBuilder();
             sb.append(String.format("\"type\",\"id_from\",\"name_to\",\"label\"%n"));
             // nodes
-            tgfModel.tgfNodeList.values().forEach(tgfNode -> {
-                sb.append(String.format("\"node\","
-                        + "\"%s\","
-                        + "\"%s\","
-                        + "\"\"%n", tgfNode.id, tgfNode.name));
-            });
+            tgfModel.tgfNodeList.values().forEach(tgfNode -> sb.append(String.format("\"node\","
+                    + "\"%s\","
+                    + "\"%s\","
+                    + "\"\"%n", tgfNode.id, tgfNode.name))
+            );
             // edges
-            tgfModel.tgfEdgeList.forEach(tgfEdge -> {
-                sb.append(String.format("\"edge\","
-                        + "\"%s\","
-                        + "\"%s\","
-                        + "\"%s\"%n", tgfEdge.from, tgfEdge.to, tgfEdge.label));
-            });
+            tgfModel.tgfEdgeList.forEach(tgfEdge -> sb.append(String.format("\"edge\","
+                    + "\"%s\","
+                    + "\"%s\","
+                    + "\"%s\"%n", tgfEdge.from, tgfEdge.to, tgfEdge.label))
+            );
             return sb.toString();
         }
     }
 
     /**
-     * Converts {@link TgfModel} to json
+     * Converts {@link TgfModel} to json.
      */
     public static class JsonConverter implements ITgfConverterToString {
 
@@ -235,12 +260,12 @@ public class TgfConverters {
     }
 
     /**
-     * Converts {@link TgfModel} to yaml
+     * Converts {@link TgfModel} to yaml.
      */
     public static class YamlConverter implements ITgfConverterToString {
 
         /**
-         * Convert {@link TgfModel} to json.
+         * Convert {@link TgfModel} to yaml.
          *
          * @param tgfModel
          * @return
@@ -277,11 +302,11 @@ public class TgfConverters {
     }
 
     static boolean stringIsEmpty(String s) {
-        return s == null || (s != null && s.isEmpty());
+        return s == null || s.isEmpty();
     }
 
     static boolean stringIsBlank(String s) {
-        return s == null || (s != null && s.trim().isEmpty());
+        return s == null || s.trim().isEmpty();
     }
 
     static class TgfModelToLevelMapping {
@@ -331,25 +356,26 @@ public class TgfConverters {
          * @param tgfModel
          * @return
          */
+        @Override
         public String convert(TgfModel tgfModel) {
             final StringBuilder sb = new StringBuilder();
             sb.append(String.format("%% start%n%n"));
             // nodes
             sb.append(String.format("%% nodes%n"));
-            tgfModel.tgfNodeList.values().forEach(tgfNode -> {
-                sb.append(String.format("%s(\"%s\",\"%s\").%n", predicateNode, tgfNode.id, tgfNode.name));
-            });
+            tgfModel.tgfNodeList.values().forEach(tgfNode
+                    -> sb.append(String.format("%s(\"%s\",\"%s\").%n", predicateNode, tgfNode.id, tgfNode.name))
+            );
             // edges
             sb.append(String.format("%% edges%n"));
             tgfModel.tgfEdgeList.forEach(tgfEdge -> {
                 if (stringIsBlank(tgfEdge.label)) {
                     sb.append(String.format("%s(\"%s\", \"%s\").%n", predicateEdge, tgfEdge.from, tgfEdge.to));
                 } else {
-                     sb.append(String.format("%s(\"%s\", \"%s\").%n", predicateEdge, tgfEdge.from, tgfEdge.to));
+                    sb.append(String.format("%s(\"%s\", \"%s\").%n", predicateEdge, tgfEdge.from, tgfEdge.to));
                     sb.append(String.format("%s(\"%s\", \"%s\", \"%s\").%n", predicateEdgeLabel, tgfEdge.from, tgfEdge.to, tgfEdge.label));
                 }
             });
-             sb.append(String.format("%n%% end%n"));
+            sb.append(String.format("%n%% end%n"));
             return sb.toString();
         }
     }
@@ -367,6 +393,7 @@ public class TgfConverters {
          * @param tgfModel
          * @return
          */
+        @Override
         public String convert(TgfModel tgfModel) {
             final StringBuilder sb = new StringBuilder();
             sb.append(String.format("%% start%n%n"));

@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.Callable;
+import org.huberb.tgftools.TgfConverters;
 import org.huberb.tgftools.TgfConverters.CsvConverter;
 import org.huberb.tgftools.TgfConverters.DatalogPropertySchemaConverter;
 import org.huberb.tgftools.TgfConverters.DatalogValueSchemaConverter;
@@ -71,9 +72,14 @@ public class TgfMain implements Callable<Integer> {
     @Option(names = {"-o", "--output"},
             description = "write to file, if not specified write to stdout")
     private File outputFile;
+
     @Option(names = {"--overwrite-outputfile"},
             description = "overwrite existing output file")
     private boolean overwriteOutputfile;
+
+    @Option(names = {"--puml-node-name"},
+            description = "puml node name like node, card, artifact")
+    private String pumlNodeName = TgfConverters.PumlNodeConverter.UML_TGF_NODE_ELEMENT;
 
     @Mixin
     private TgfConvertToOptions tgfConvertToOptions;
@@ -118,7 +124,7 @@ public class TgfMain implements Callable<Integer> {
         if (convertToFormatList.isEmpty()) {
             final String str = String.format("No conversion option was specified.%n"
                     + "Use one of the conversion-options \"--convert-*\"");
-            System_err_println(str);
+            systemErrPrintln(str);
             return;
         }
         //---
@@ -127,17 +133,18 @@ public class TgfMain implements Callable<Integer> {
         //---
         for (ConvertToFormat convertToFormat : convertToFormatList) {
 
-            final Optional<File> outputFile = outputFileList.get(convertToFormat);
-            if (!this.overwriteOutputfile && outputFile.isPresent() && outputFile.get().exists()) {
+            final Optional<File> aOutputFile = outputFileList.get(convertToFormat);
+            if (!this.overwriteOutputfile && aOutputFile.isPresent() && aOutputFile.get().exists()) {
                 final String str = Ansi.AUTO.string(
-                        String.format("Output file %s already exists, don't overwrite it.", outputFile.toString())
+                        String.format("Output file %s already exists, don't overwrite it.", aOutputFile.toString())
                 );
-                System_err_println(str);
+                systemErrPrintln(str);
                 continue;
             }
             final String conversionResult;
             if (convertToFormat == ConvertToFormat.puml) {
-                conversionResult = new PumlNodeConverter().convert(tgfModel);
+                String nodeName = this.pumlNodeName;
+                conversionResult = new PumlNodeConverter(nodeName).convert(tgfModel);
             } else if (convertToFormat == ConvertToFormat.pumlMindmap) {
                 conversionResult = new PumlMindmapConverter().convert(tgfModel);
             } else if (convertToFormat == ConvertToFormat.pumlWbs) {
@@ -156,17 +163,17 @@ public class TgfMain implements Callable<Integer> {
                 conversionResult = null;
             }
             if (conversionResult != null) {
-                System_err_println(String.format(">>> file: %s, format: %s",
+                systemErrPrintln(String.format(">>> file: %s, format: %s",
                         evaluteWriteToFilenameOrStdin(),
                         convertToFormat));
-                if (!outputFile.isPresent()) {
-                    System_out_println(conversionResult);
+                if (!aOutputFile.isPresent()) {
+                    systemOutPrintln(conversionResult);
                 } else {
-                    try (final FileOutputStream fos = new FileOutputStream(outputFile.get()); final OutputStreamWriter writer = new OutputStreamWriter(fos, StandardCharsets.UTF_8)) {
+                    try (final FileOutputStream fos = new FileOutputStream(aOutputFile.get()); final OutputStreamWriter writer = new OutputStreamWriter(fos, StandardCharsets.UTF_8)) {
                         writer.write(conversionResult);
                     } catch (IOException ioex) {
-                        System_err_println(String.format("Cannot write to file: %s:%n %s",
-                                outputFile.get(),
+                        systemErrPrintln(String.format("Cannot write to file: %s:%n %s",
+                                aOutputFile.get(),
                                 ioex.getMessage()
                         ));
                     }
@@ -176,10 +183,9 @@ public class TgfMain implements Callable<Integer> {
     }
 
     String evaluteWriteToFilenameOrStdin() {
-        final String result = Optional.ofNullable(this.tgfFile)
-                .map((f) -> f.toString())
+        return Optional.ofNullable(this.tgfFile)
+                .map(f -> f.toString())
                 .orElse("stdin");
-        return result;
     }
 
     /**
@@ -213,7 +219,7 @@ public class TgfMain implements Callable<Integer> {
      *
      * @param str
      */
-    private void System_err_println(String str) {
+    private void systemErrPrintln(String str) {
         final PrintWriter pw = spec.commandLine().getErr();
         pw.println(str);
     }
@@ -223,7 +229,7 @@ public class TgfMain implements Callable<Integer> {
      *
      * @param conversionResult
      */
-    private void System_out_println(String conversionResult) {
+    private void systemOutPrintln(String conversionResult) {
         final PrintWriter pw = spec.commandLine().getOut();
         pw.println(conversionResult);
     }

@@ -33,8 +33,8 @@ public class TgfParserTest {
     public void testTokenize_node() {
         final TgfParser tgfParser = new TgfParser();
         TgfTokenValue tgfToken;
-        tgfToken = tgfParser.tokenize(ParsingTgfStatus.parsingNodes, "id1 nodeLabel1");
-        assertEquals(TgfToken.node, tgfToken.token);
+        tgfToken = tgfParser.tokenize(ParsingTgfStatus.PARSING_NODES, "id1 nodeLabel1");
+        assertEquals(TgfToken.NODE, tgfToken.token);
         assertEquals("id1", tgfToken.tgfNode.getId());
         assertEquals("nodeLabel1", tgfToken.tgfNode.getName());
     }
@@ -48,8 +48,8 @@ public class TgfParserTest {
     public void testTokenize_node_with_label_X(String nodeLine) {
         final TgfParser tgfParser = new TgfParser();
         TgfTokenValue tgfToken;
-        tgfToken = tgfParser.tokenize(ParsingTgfStatus.parsingNodes, nodeLine);
-        assertEquals(TgfToken.node, tgfToken.token);
+        tgfToken = tgfParser.tokenize(ParsingTgfStatus.PARSING_NODES, nodeLine);
+        assertEquals(TgfToken.NODE, tgfToken.token);
         assertEquals("id1", tgfToken.tgfNode.getId());
         assertEquals("nodeLabel1", tgfToken.tgfNode.getName());
     }
@@ -58,8 +58,8 @@ public class TgfParserTest {
     public void testTokenize_edge() {
         final TgfParser tgfParser = new TgfParser();
         TgfTokenValue tgfToken;
-        tgfToken = tgfParser.tokenize(ParsingTgfStatus.parsingEdges, "fromNode1 toNode1 edgeLabel1");
-        assertEquals(TgfToken.edge, tgfToken.token);
+        tgfToken = tgfParser.tokenize(ParsingTgfStatus.PARSING_EDGES, "fromNode1 toNode1 edgeLabel1");
+        assertEquals(TgfToken.EDGE, tgfToken.token);
         assertEquals("fromNode1", tgfToken.tgfEdge.getFrom());
         assertEquals("toNode1", tgfToken.tgfEdge.getTo());
         assertEquals("edgeLabel1", tgfToken.tgfEdge.getLabel());
@@ -73,8 +73,8 @@ public class TgfParserTest {
     public void testTokenize_node_wo_label_X(String nodeLine) {
         final TgfParser tgfParser = new TgfParser();
         TgfTokenValue tgfToken;
-        tgfToken = tgfParser.tokenize(ParsingTgfStatus.parsingNodes, nodeLine);
-        assertEquals(TgfToken.node, tgfToken.token);
+        tgfToken = tgfParser.tokenize(ParsingTgfStatus.PARSING_NODES, nodeLine);
+        assertEquals(TgfToken.NODE, tgfToken.token);
         assertEquals("id1", tgfToken.tgfNode.getId());
         assertEquals("", tgfToken.tgfNode.getName());
     }
@@ -88,8 +88,8 @@ public class TgfParserTest {
     public void testTokenize_edge_with_edgeLabel_X(String edgeLine) {
         final TgfParser tgfParser = new TgfParser();
         TgfTokenValue tgfToken;
-        tgfToken = tgfParser.tokenize(ParsingTgfStatus.parsingEdges, edgeLine);
-        assertEquals(TgfToken.edge, tgfToken.token);
+        tgfToken = tgfParser.tokenize(ParsingTgfStatus.PARSING_EDGES, edgeLine);
+        assertEquals(TgfToken.EDGE, tgfToken.token);
         assertEquals("fromNode1", tgfToken.tgfEdge.getFrom());
         assertEquals("toNode1", tgfToken.tgfEdge.getTo());
         assertEquals("edgeLabel1", tgfToken.tgfEdge.getLabel());
@@ -104,8 +104,8 @@ public class TgfParserTest {
     public void testTokenize_edge_wo_edgeLabel_X(String edgeLine) {
         final TgfParser tgfParser = new TgfParser();
         TgfTokenValue tgfToken;
-        tgfToken = tgfParser.tokenize(ParsingTgfStatus.parsingEdges, edgeLine);
-        assertEquals(TgfToken.edge, tgfToken.token);
+        tgfToken = tgfParser.tokenize(ParsingTgfStatus.PARSING_EDGES, edgeLine);
+        assertEquals(TgfToken.EDGE, tgfToken.token);
         assertEquals("fromNode1", tgfToken.tgfEdge.getFrom());
         assertEquals("toNode1", tgfToken.tgfEdge.getTo());
         assertEquals("", tgfToken.tgfEdge.getLabel());

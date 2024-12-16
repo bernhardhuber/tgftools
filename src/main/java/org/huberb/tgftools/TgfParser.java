@@ -24,6 +24,7 @@ import org.huberb.tgftools.TgfModel.TgfEdge;
 import org.huberb.tgftools.TgfModel.TgfNode;
 
 /**
+ * TGF-Syntax.
  *
  * <pre><code>
  * file := node_list
@@ -54,16 +55,12 @@ public class TgfParser {
      * Definition of parsing states
      */
     enum ParsingTgfStatus {
-        start,
-        parsingNodes,
-        parsingEdges,
-        end
+        START,
+        PARSING_NODES,
+        PARSING_EDGES,
+        END
     }
 
-    /**
-     * Current parsing state.
-     */
-    private ParsingTgfStatus parsingTgfStatus = ParsingTgfStatus.start;
     /**
      * Tokens for line comments.
      */
@@ -78,25 +75,25 @@ public class TgfParser {
      */
     public TgfModel parse(Reader rr) throws IOException {
         final TgfModel tgfModel = new TgfModel();
-
-        parsingTgfStatus = ParsingTgfStatus.parsingNodes;
+        ParsingTgfStatus parsingTgfStatus = ParsingTgfStatus.START;
+        parsingTgfStatus = ParsingTgfStatus.PARSING_NODES;
 
         try (BufferedReader r = new BufferedReader(rr)) {
             for (String line; (line = r.readLine()) != null;) {
                 final TgfTokenValue tgfToken = tokenize(parsingTgfStatus, line);
-                if (tgfToken.token == TgfToken.empty) {
+                if (tgfToken.token == TgfToken.EMPTY) {
                     continue;
-                } else if (tgfToken.token == TgfToken.hashMark) {
+                } else if (tgfToken.token == TgfToken.HASH_MARK) {
                     switch (parsingTgfStatus) {
-                        case parsingNodes:
-                            parsingTgfStatus = ParsingTgfStatus.parsingEdges;
+                        case PARSING_NODES:
+                            parsingTgfStatus = ParsingTgfStatus.PARSING_EDGES;
                             break;
                         default:
                         // noop
                     }
-                } else if (tgfToken.token == TgfToken.node) {
+                } else if (tgfToken.token == TgfToken.NODE) {
                     tgfModel.addNode(tgfToken.tgfNode);
-                } else if (tgfToken.token == TgfToken.edge) {
+                } else if (tgfToken.token == TgfToken.EDGE) {
                     tgfModel.addEdge(tgfToken.tgfEdge);
                 } else {
                     // noop
@@ -110,10 +107,10 @@ public class TgfParser {
      * Definition of tokens.
      */
     enum TgfToken {
-        empty,
-        node,
-        hashMark,
-        edge
+        EMPTY,
+        NODE,
+        HASH_MARK,
+        EDGE
 
     }
 
@@ -131,11 +128,11 @@ public class TgfParser {
         }
 
         public TgfTokenValue(TgfNode tgfNode) {
-            this(TgfToken.node, tgfNode, null);
+            this(TgfToken.NODE, tgfNode, null);
         }
 
         public TgfTokenValue(TgfEdge tgfEdge) {
-            this(TgfToken.edge, null, tgfEdge);
+            this(TgfToken.EDGE, null, tgfEdge);
         }
 
         private TgfTokenValue(TgfToken token, TgfNode tgfNode, TgfEdge tgfEdge) {
@@ -161,13 +158,13 @@ public class TgfParser {
 
         if (trimmedLine.isEmpty()
                 || commentsList.contains(trimmedLine)) {
-            token = TgfToken.empty;
+            token = TgfToken.EMPTY;
         } else if (trimmedLine.startsWith("#")) {
-            token = TgfToken.hashMark;
+            token = TgfToken.HASH_MARK;
         } else {
             switch (parsingTgfStatus) {
                 // nodeId nodeLabel
-                case parsingNodes: {
+                case PARSING_NODES: {
                     final String[] splitted = trimmedLine.split(" +", 2);
                     final String nodeId = splitted[0].trim();
                     final String nodeLabel;
@@ -176,11 +173,11 @@ public class TgfParser {
                     } else {
                         nodeLabel = "";
                     }
-                    token = TgfToken.node;
+                    token = TgfToken.NODE;
                     tgfNode = new TgfNode(nodeId, nodeLabel);
                 }
                 break;
-                case parsingEdges: // fromNodeId toNodeId [label]
+                case PARSING_EDGES: // fromNodeId toNodeId [label]
                 {
                     final String[] split = trimmedLine.split(" +", 3);
                     final String fromNodeId = split[0].trim();
@@ -191,30 +188,30 @@ public class TgfParser {
                     } else {
                         edgeLabel = "";
                     }
-                    token = TgfToken.edge;
+                    token = TgfToken.EDGE;
                     tgfEdge = new TgfEdge(fromNodeId, toNodeId, edgeLabel);
                 }
                 break;
                 default:
-                    token = TgfToken.empty;
+                    token = TgfToken.EMPTY;
             }
         }
         final TgfTokenValue result;
         switch (token) {
-            case empty:
+            case EMPTY:
                 result = new TgfTokenValue(token);
                 break;
-            case hashMark:
+            case HASH_MARK:
                 result = new TgfTokenValue(token);
                 break;
-            case node:
+            case NODE:
                 result = new TgfTokenValue(tgfNode);
                 break;
-            case edge:
+            case EDGE:
                 result = new TgfTokenValue(tgfEdge);
                 break;
             default:
-                result = new TgfTokenValue(TgfToken.empty);
+                result = new TgfTokenValue(TgfToken.EMPTY);
                 break;
         }
         return result;

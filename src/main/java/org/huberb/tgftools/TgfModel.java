@@ -19,6 +19,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -31,7 +32,7 @@ import java.util.Objects;
 public class TgfModel implements Serializable {
 
     private static final long serialVersionUID = 20211001L;
-    final LinkedHashMap<String, TgfNode> tgfNodeList;
+    final Map<String, TgfNode> tgfNodeList;
     final List<TgfEdge> tgfEdgeList;
 
     TgfModel() {
@@ -75,10 +76,7 @@ public class TgfModel implements Serializable {
         if (!Objects.equals(this.tgfNodeList, other.tgfNodeList)) {
             return false;
         }
-        if (!Objects.equals(this.tgfEdgeList, other.tgfEdgeList)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.tgfEdgeList, other.tgfEdgeList);
     }
 
     /**
@@ -132,10 +130,7 @@ public class TgfModel implements Serializable {
             if (!Objects.equals(this.id, other.id)) {
                 return false;
             }
-            if (!Objects.equals(this.name, other.name)) {
-                return false;
-            }
-            return true;
+            return Objects.equals(this.name, other.name);
         }
     }
 
@@ -200,10 +195,7 @@ public class TgfModel implements Serializable {
             if (!Objects.equals(this.to, other.to)) {
                 return false;
             }
-            if (!Objects.equals(this.label, other.label)) {
-                return false;
-            }
-            return true;
+            return Objects.equals(this.label, other.label);
         }
     }
 
